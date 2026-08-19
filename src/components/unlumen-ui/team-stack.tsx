@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from "motion/react";
 import {
   TrendingUp,
   Activity,
@@ -13,7 +13,12 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Maximize2
+  Maximize2,
+  Cpu,
+  Zap,
+  Radio,
+  BarChart3,
+  Sliders
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +31,7 @@ export interface StackCardItem {
   subValue?: string;
   headline?: string;
   description: string;
-  gradient: string;
+  gradient?: string;
   accentColor: string;
   accentBg: string;
   borderColor: string;
@@ -36,90 +41,106 @@ export interface StackCardItem {
   progressPercent?: number;
   tag?: string;
   ctaLabel?: string;
+  features?: string[];
+  sparkline?: number[];
 }
 
 export const DEFAULT_CARDS: StackCardItem[] = [
   {
     id: "orders",
-    title: "Orders & Sales",
+    title: "Orders & Commercial Flow",
     badge: "@order_flow",
-    category: "Commercial Flow",
-    metricLabel: "Active Orders",
+    category: "Commercial Pipeline",
+    metricLabel: "Active In-Flight Orders",
     metricBadge: "14 In-Flight",
     primaryValue: "$42,850",
-    description: "All stages synced from quote to dispatch",
-    gradient: "from-[#1e1b4b] via-[#312e81] to-[#0f172a]",
+    headline: "QUOTE TO CASH CONVERGENCE",
+    description: "Every order stage verified in real-time from customer credit limit check to technical drawing signoff.",
     accentColor: "#BAF91A",
     accentBg: "rgba(186, 249, 26, 0.15)",
-    borderColor: "rgba(186, 249, 26, 0.3)",
+    borderColor: "rgba(186, 249, 26, 0.35)",
     icon: TrendingUp,
-    ctaLabel: "View Order Pipeline",
+    tag: "LIVE PIPELINE",
+    ctaLabel: "View Order Flow",
+    features: ["Instant drawing spec lock", "Live customer credit check", "Automated margin validation"],
+    sparkline: [35, 42, 38, 55, 62, 58, 72, 85]
   },
   {
     id: "production",
-    title: "Shop Floor & WIP",
+    title: "Shop Floor & WIP Telemetry",
     badge: "@production_live",
-    category: "Operations",
-    metricLabel: "Overall Plant Yield",
-    metricBadge: "92.4%",
-    headline: "Job Cards Active",
-    description: "Real-time machine telemetry and shift yield monitoring",
-    progressPercent: 92.4,
-    gradient: "from-[#042f2e] via-[#065f46] to-[#022c22]",
+    category: "Operations & Floor",
+    metricLabel: "Plant OEE Yield Efficiency",
+    metricBadge: "94.2% Yield",
+    primaryValue: "94.2%",
+    headline: "REAL-TIME MACHINE ROUTING",
+    description: "Touch-screen job card progress, machine downtime capture, and live stage bottleneck alerts.",
+    progressPercent: 94.2,
     accentColor: "#34d399",
     accentBg: "rgba(52, 211, 153, 0.15)",
-    borderColor: "rgba(52, 211, 153, 0.3)",
+    borderColor: "rgba(52, 211, 153, 0.35)",
     icon: Activity,
+    tag: "FLOOR TELEMETRY",
     ctaLabel: "Inspect Floor Telemetry",
+    features: ["QR code route cards", "Live bottleneck prediction", "Instant operator scrap alerts"],
+    sparkline: [60, 65, 75, 70, 82, 88, 91, 94]
   },
   {
     id: "command",
     title: "Owner Command Center",
     badge: "@live_command",
     category: "Executive Command",
-    metricLabel: "Real-Time Business Pulse",
+    metricLabel: "Reconciled Business Pulse",
     metricBadge: "100% In Sync",
-    headline: "SEE • CONTROL • MEASURE • DECIDE",
-    description: "Every critical metric reconciled live without asking department heads for manual Excel reports.",
-    gradient: "from-[#18181b] via-[#27272a] to-[#09090b]",
+    primaryValue: "10+ Modules",
+    headline: "SEE • CONTROL • MEASURE • SCALE",
+    description: "One single ledger reconciling production yield, supplier inventory, and realized gross margins with zero manual reports.",
     accentColor: "#BAF91A",
     accentBg: "rgba(186, 249, 26, 0.2)",
     borderColor: "rgba(186, 249, 26, 0.5)",
     icon: Sparkles,
-    tag: "FEATURED CORE",
+    tag: "FLAGSHIP CORE",
     ctaLabel: "Open Master Console",
+    features: ["Real-time single ledger", "Grounded AI Copilot queries", "Zero WhatsApp chasing"],
+    sparkline: [40, 50, 65, 70, 80, 85, 95, 100]
   },
   {
     id: "inventory",
-    title: "Inventory & Reorder",
+    title: "Inventory & Smart Buffer",
     badge: "@stock_buffer",
-    category: "Supply Chain",
-    metricLabel: "Safety Stock",
-    metricBadge: "Auto Alert",
-    headline: "Raw Material Tracked",
-    description: "Automated PO requisition generated",
-    gradient: "from-[#451a03] via-[#78350f] to-[#1c1917]",
+    category: "Supply Chain & PO",
+    metricLabel: "Buffer Depletion Sentinel",
+    metricBadge: "Auto-Reorder",
+    primaryValue: "340 SKUs",
+    headline: "AUTOMATED SHORTAGE PREVENTION",
+    description: "Shortages automatically trigger purchase requisitions to approved vendors with lead-time sync.",
     accentColor: "#fbbf24",
     accentBg: "rgba(251, 191, 36, 0.15)",
-    borderColor: "rgba(251, 191, 36, 0.3)",
+    borderColor: "rgba(251, 191, 36, 0.35)",
     icon: AlertTriangle,
+    tag: "ZERO STOCKOUTS",
     ctaLabel: "Review Requisitions",
+    features: ["Multi-warehouse bin tracking", "Batch FIFO allocation", "Supplier contract rate sync"],
+    sparkline: [80, 75, 70, 65, 55, 60, 78, 88]
   },
   {
     id: "finance",
-    title: "Cash & Accounting",
+    title: "Cash Flow & Ledger Sync",
     badge: "@finance_live",
     category: "Treasury & AP/AR",
-    metricLabel: "Net Operating Cash",
-    metricBadge: "Live",
+    metricLabel: "Net Operating Cash Flow",
+    metricBadge: "Live Reconciled",
     primaryValue: "$128,400",
-    description: "Invoices & AP/AR automatically reconciled",
-    gradient: "from-[#082f49] via-[#0369a1] to-[#0c4a6e]",
-    accentColor: "#38bdf8",
-    accentBg: "rgba(56, 189, 248, 0.15)",
-    borderColor: "rgba(56, 189, 248, 0.3)",
+    headline: "INSTANT JOB PROFITABILITY",
+    description: "Dispatch generates tax invoices and syncs accounts receivable without duplicate spreadsheet entry.",
+    accentColor: "#876DFF",
+    accentBg: "rgba(135, 109, 255, 0.15)",
+    borderColor: "rgba(135, 109, 255, 0.35)",
     icon: DollarSign,
+    tag: "REAL-TIME AR/AP",
     ctaLabel: "Audit Cash Balance",
+    features: ["Actual BOM margin tracking", "Automated GST & tax sync", "Customer credit aging"],
+    sparkline: [50, 60, 55, 70, 85, 90, 110, 128]
   },
 ];
 
@@ -136,306 +157,335 @@ export function TeamStack({
   onCardClick,
   defaultExpanded = false,
 }: TeamStackProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [activeCardIndex, setActiveCardIndex] = useState<number>(2); // Center card (Owner Command Center)
+  const [activeCardIndex, setActiveCardIndex] = useState<number>(0);
   const [isFannedOut, setIsFannedOut] = useState<boolean>(defaultExpanded);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Allow manual card cycling
-  const handlePrev = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  // Detect mobile screen for optimal gesture & layout handling
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const handlePrev = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     setActiveCardIndex((prev) => (prev > 0 ? prev - 1 : cards.length - 1));
   };
 
-  const handleNext = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleNext = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     setActiveCardIndex((prev) => (prev < cards.length - 1 ? prev + 1 : 0));
   };
 
-  // Deterministic calculations for natural stacking deck
-  const getCardTransform = (index: number, total: number) => {
-    const isExpanded = isHovered || isFannedOut;
-    const centerIndex = Math.floor(total / 2);
-    const offsetFromCenter = index - centerIndex;
-    const isSelected = activeCardIndex === index;
-
-    if (isExpanded) {
-      // Fanned out horizontal deck layout with smooth rotation & spacing
-      const xSpread = offsetFromCenter * 140; // Responsive fan out
-      const rotateDeg = offsetFromCenter * 3.5;
-      const yOffset = Math.abs(offsetFromCenter) * 12;
-
-      return {
-        x: xSpread,
-        y: isSelected ? yOffset - 18 : yOffset,
-        rotate: isSelected ? 0 : rotateDeg,
-        scale: isSelected ? 1.05 : 0.98,
-        zIndex: isSelected ? 40 : 20 - Math.abs(offsetFromCenter),
-      };
+  // Touch Swipe Drag Handler for Mobile
+  const handleDragEnd = (_: any, info: PanInfo) => {
+    const swipeThreshold = 45;
+    if (info.offset.x < -swipeThreshold) {
+      handleNext();
+    } else if (info.offset.x > swipeThreshold) {
+      handlePrev();
     }
-
-    // Stacked deck state with deterministic jitter/tilt
-    // The active card is brought to top or front
-    const stackOffsets = [
-      { x: -36, y: 16, rotate: -8, zIndex: 1 },
-      { x: -18, y: 8, rotate: -4, zIndex: 2 },
-      { x: 0, y: 0, rotate: 0, zIndex: 5 }, // Center
-      { x: 18, y: 8, rotate: 4, zIndex: 3 },
-      { x: 36, y: 16, rotate: 8, zIndex: 1 },
-    ];
-
-    const defaultPose = stackOffsets[index] || {
-      x: offsetFromCenter * 16,
-      y: Math.abs(offsetFromCenter) * 8,
-      rotate: offsetFromCenter * 4,
-      zIndex: 10 - Math.abs(offsetFromCenter),
-    };
-
-    if (isSelected) {
-      return {
-        x: 0,
-        y: -14,
-        rotate: 0,
-        scale: 1.04,
-        zIndex: 50,
-      };
-    }
-
-    return {
-      x: defaultPose.x,
-      y: defaultPose.y,
-      rotate: defaultPose.rotate,
-      scale: 1,
-      zIndex: defaultPose.zIndex,
-    };
   };
+
+  const currentCard = cards[activeCardIndex] || cards[0];
 
   return (
     <div
+      ref={containerRef}
       id="unlumen-team-stack"
       className={cn(
-        "relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center select-none py-6",
+        "relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center select-none py-3 sm:py-6 px-1 sm:px-4",
         className
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Interactive Controls & Mode Toggle Header */}
-      <div className="flex items-center justify-between w-full max-w-2xl px-4 mb-4 text-xs">
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/5 dark:bg-white/10 text-slate-700 text-[11px] font-semibold border border-slate-200/60 backdrop-blur-sm shadow-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#BAF91A] animate-pulse"></span>
-            Interactive Stack Deck
-          </span>
-          <span className="text-slate-400 hidden sm:inline">•</span>
-          <span className="text-slate-500 text-[11px] hidden sm:inline">
-            Hover to fan out or click cards to focus
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setIsFannedOut(!isFannedOut)}
-            className="px-2.5 py-1 rounded-lg text-[11px] font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 shadow-2xs hover:text-slate-900 transition-colors flex items-center gap-1.5 cursor-pointer"
-            title="Toggle fanned grid view"
-          >
-            <Maximize2 className="w-3 h-3 text-slate-500" />
-            <span>{isFannedOut ? "Stack Deck" : "Fan Out"}</span>
-          </button>
-
-          <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-0.5 shadow-2xs">
-            <button
-              type="button"
-              onClick={handlePrev}
-              className="p-1 rounded text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
-              aria-label="Previous card"
-            >
-              <ChevronLeft className="w-3.5 h-3.5" />
-            </button>
-            <span className="text-[10px] font-mono px-1 font-semibold text-slate-600">
-              {activeCardIndex + 1}/{cards.length}
-            </span>
-            <button
-              type="button"
-              onClick={handleNext}
-              className="p-1 rounded text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
-              aria-label="Next card"
-            >
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Stack Container Stage */}
-      <div className="relative w-full h-[360px] sm:h-[390px] flex items-center justify-center overflow-visible">
-        {/* Glow backdrop behind cards */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[380px] sm:w-[500px] h-[220px] bg-gradient-to-r from-[#BAF91A]/15 via-[#876DFF]/15 to-[#38bdf8]/15 blur-3xl rounded-full opacity-70" />
-        </div>
-
-        {/* Stack of Cards */}
-        <div className="relative w-[280px] sm:w-[320px] h-[310px] flex items-center justify-center">
-          {cards.map((card, index) => {
-            const isSelected = activeCardIndex === index;
-            const targetPose = getCardTransform(index, cards.length);
+      {/* 1. TOP SEGMENTED CONTROLLER / PILL SELECTOR (Frictionless 1-Tap Card Switcher) */}
+      <div className="w-full flex items-center justify-center mb-5 overflow-x-auto pb-1.5 scrollbar-none px-2">
+        <div className="inline-flex items-center gap-1 sm:gap-1.5 p-1 rounded-2xl bg-slate-900/5 dark:bg-slate-900/40 border border-slate-200/80 backdrop-blur-xl shadow-xs">
+          {cards.map((card, idx) => {
+            const isSelected = activeCardIndex === idx;
             const Icon = card.icon;
-
             return (
-              <motion.div
+              <button
                 key={card.id}
-                id={`stack-card-${card.id}`}
-                layout
-                onClick={() => {
-                  setActiveCardIndex(index);
-                  if (onCardClick) onCardClick(card);
-                }}
-                animate={{
-                  x: targetPose.x,
-                  y: targetPose.y,
-                  rotate: targetPose.rotate,
-                  scale: targetPose.scale,
-                  zIndex: targetPose.zIndex,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 280,
-                  damping: 24,
-                  mass: 0.8,
-                }}
-                whileHover={{
-                  scale: (targetPose.scale || 1) * 1.03,
-                  transition: { duration: 0.2 },
-                }}
+                type="button"
+                onClick={() => setActiveCardIndex(idx)}
                 className={cn(
-                  "absolute inset-0 rounded-2xl p-5 text-white cursor-pointer select-none",
-                  "bg-gradient-to-b shadow-2xl backdrop-blur-md transition-shadow",
-                  card.gradient,
+                  "relative px-3 sm:px-4 py-1.5 rounded-xl text-xs font-semibold transition-all duration-300 flex items-center gap-1.5 cursor-pointer whitespace-nowrap",
                   isSelected
-                    ? "ring-2 ring-[#BAF91A] shadow-2xl shadow-black/40"
-                    : "ring-1 ring-white/15 hover:ring-white/30"
+                    ? "text-[#101312] shadow-sm font-bold"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
                 )}
-                style={{
-                  boxShadow: isSelected
-                    ? "0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 20px rgba(186, 249, 26, 0.25)"
-                    : "0 15px 35px -10px rgba(0, 0, 0, 0.5)",
-                }}
               >
-                {/* Top Bar: Title, Handle badge, Tag */}
-                <div className="flex items-start justify-between gap-2 pb-3 border-b border-white/10">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-6 h-6 rounded-lg flex items-center justify-center text-xs"
-                        style={{
-                          backgroundColor: card.accentBg,
-                          color: card.accentColor,
-                        }}
-                      >
-                        <Icon className="w-3.5 h-3.5" />
-                      </div>
-                      <h3 className="text-sm font-bold text-slate-100 tracking-tight font-heading">
-                        {card.title}
-                      </h3>
-                    </div>
-                    <span className="text-[11px] font-mono text-[#BAF91A]/90 mt-0.5 inline-block font-medium">
-                      {card.badge}
-                    </span>
-                  </div>
-
-                  {card.tag && (
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-[#BAF91A] text-slate-950 shadow-xs">
-                      {card.tag}
-                    </span>
-                  )}
-                </div>
-
-                {/* Card Content Body */}
-                <div className="pt-4 space-y-3">
-                  {/* Metric Status Header */}
-                  {card.metricLabel && (
-                    <div className="flex items-center justify-between text-xs text-slate-300">
-                      <span className="font-medium">{card.metricLabel}</span>
-                      {card.metricBadge && (
-                        <span
-                          className="px-2 py-0.5 rounded-md text-[11px] font-bold"
-                          style={{
-                            backgroundColor: card.accentBg,
-                            color: card.accentColor,
-                          }}
-                        >
-                          {card.metricBadge}
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Primary Big Metric or Headline */}
-                  {card.primaryValue && (
-                    <div className="text-3xl font-extrabold text-white tracking-tight font-heading">
-                      {card.primaryValue}
-                    </div>
-                  )}
-
-                  {card.headline && (
-                    <div className="text-base font-bold text-slate-100 font-heading leading-tight tracking-wide">
-                      {card.headline}
-                    </div>
-                  )}
-
-                  {/* Progress Bar if Yield is tracked */}
-                  {typeof card.progressPercent === "number" && (
-                    <div className="space-y-1">
-                      <div className="w-full bg-black/40 rounded-full h-1.5 overflow-hidden">
-                        <motion.div
-                          initial={{ width: "0%" }}
-                          animate={{ width: `${card.progressPercent}%` }}
-                          transition={{ duration: 1.2, ease: "easeOut" }}
-                          className="h-full rounded-full bg-emerald-400"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Description pill */}
-                  <p className="text-xs text-slate-300 leading-relaxed bg-black/25 p-2.5 rounded-xl border border-white/5">
-                    {card.description}
-                  </p>
-                </div>
-
-                {/* Bottom Spring CTA Pill */}
-                <div className="absolute bottom-3.5 left-5 right-5 flex items-center justify-between pt-2 border-t border-white/10 text-[11px]">
-                  <span className="text-slate-400 font-medium flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#BAF91A] inline-block animate-pulse"></span>
-                    Live Sync
+                {isSelected && (
+                  <motion.div
+                    layoutId="activeTeamStackTab"
+                    className="absolute inset-0 bg-[#BAF91A] rounded-xl -z-10 shadow-xs"
+                    transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                  />
+                )}
+                <Icon className={cn("w-3.5 h-3.5", isSelected ? "text-[#101312]" : "text-slate-500")} />
+                <span>{card.title.split(" ")[0]}</span>
+                {card.tag && (
+                  <span
+                    className={cn(
+                      "hidden sm:inline-block text-[9px] px-1.5 py-0.2 rounded-full font-mono uppercase",
+                      isSelected
+                        ? "bg-black/15 text-black"
+                        : "bg-slate-200 text-slate-600"
+                    )}
+                  >
+                    {card.tag.split(" ")[0]}
                   </span>
-                  <div className="flex items-center gap-1 font-semibold text-slate-200 group-hover:text-white">
-                    <span>{card.ctaLabel || "View Live"}</span>
-                    <ArrowUpRight className="w-3 h-3 text-[#BAF91A]" />
-                  </div>
-                </div>
-              </motion.div>
+                )}
+              </button>
             );
           })}
         </div>
       </div>
 
-      {/* Card Selector Indicator Dots below stack */}
-      <div className="flex items-center justify-center gap-2 mt-4">
-        {cards.map((card, idx) => (
-          <button
-            key={card.id}
-            type="button"
-            onClick={() => setActiveCardIndex(idx)}
-            className={cn(
-              "h-2 rounded-full transition-all duration-300 cursor-pointer",
-              activeCardIndex === idx
-                ? "w-8 bg-[#BAF91A]"
-                : "w-2 bg-slate-300 hover:bg-slate-400"
-            )}
-            aria-label={`Select ${card.title}`}
+      {/* 2. MAIN CAROUSEL SHOWCASE STAGE */}
+      <div className="relative w-full flex items-center justify-center min-h-[380px] sm:min-h-[420px]">
+        {/* Subtle Ambient Backlight Glow */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 overflow-hidden">
+          <motion.div
+            animate={{
+              scale: [1, 1.08, 1],
+              opacity: [0.35, 0.55, 0.35],
+            }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="w-[320px] sm:w-[540px] h-[260px] sm:h-[320px] rounded-full blur-3xl"
+            style={{
+              background: `radial-gradient(circle, ${currentCard.accentColor}33 0%, rgba(135,109,255,0.15) 50%, transparent 80%)`,
+            }}
           />
-        ))}
+        </div>
+
+        {/* Carousel Cards Container */}
+        <div className="relative w-full max-w-[340px] xs:max-w-[380px] sm:max-w-[440px] md:max-w-[480px] h-[370px] sm:h-[400px] flex items-center justify-center">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentCard.id}
+              drag={isMobile ? "x" : false}
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.25}
+              onDragEnd={handleDragEnd}
+              initial={{ opacity: 0, y: 16, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -16, scale: 0.96 }}
+              transition={{
+                type: "spring",
+                stiffness: 340,
+                damping: 28,
+              }}
+              whileHover={!isMobile ? { y: -4, transition: { duration: 0.2 } } : {}}
+              onClick={() => onCardClick && onCardClick(currentCard)}
+              className={cn(
+                "w-full h-full rounded-[2rem] p-5 sm:p-7 text-white cursor-pointer select-none",
+                "bg-[#0B0F17]/95 backdrop-blur-2xl border transition-all duration-300",
+                "shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col justify-between relative overflow-hidden group"
+              )}
+              style={{
+                borderColor: currentCard.borderColor || "rgba(255, 255, 255, 0.12)",
+                boxShadow: `0 20px 45px -15px rgba(0, 0, 0, 0.8), 0 0 25px -5px ${currentCard.accentColor}25`,
+              }}
+            >
+              {/* Top Accent Rim Light */}
+              <div
+                className="absolute top-0 inset-x-8 h-[1.5px] opacity-80"
+                style={{
+                  background: `linear-gradient(90deg, transparent, ${currentCard.accentColor}, transparent)`,
+                }}
+              />
+
+              {/* CARD TOP HEADER: Tag, Live Status, Category */}
+              <div className="space-y-2 relative z-10">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center text-xs font-bold shadow-inner"
+                      style={{
+                        backgroundColor: currentCard.accentBg,
+                        color: currentCard.accentColor,
+                        border: `1px solid ${currentCard.borderColor}`,
+                      }}
+                    >
+                      <currentCard.icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold block">
+                        {currentCard.category || "Autonomous OS"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Live Status Pill */}
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono text-slate-200">
+                    <span
+                      className="w-1.5 h-1.5 rounded-full animate-pulse"
+                      style={{ backgroundColor: currentCard.accentColor }}
+                    />
+                    <span className="font-semibold">{currentCard.tag || "REAL-TIME"}</span>
+                  </div>
+                </div>
+
+                <div className="pt-1">
+                  <h3 className="text-xl sm:text-2xl font-heading font-extrabold text-white tracking-tight leading-tight flex items-center gap-2">
+                    <span>{currentCard.title}</span>
+                  </h3>
+                  <span
+                    className="text-xs font-mono font-medium block mt-0.5"
+                    style={{ color: currentCard.accentColor }}
+                  >
+                    {currentCard.badge}
+                  </span>
+                </div>
+              </div>
+
+              {/* CARD MIDDLE: KPI Highlight & Features */}
+              <div className="space-y-3 relative z-10 my-auto py-1">
+                {/* Metric Readout Card */}
+                <div className="p-3 sm:p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] text-slate-400 font-medium block">
+                      {currentCard.metricLabel || "Operating Velocity"}
+                    </span>
+                    <div className="text-2xl sm:text-3xl font-extrabold font-heading text-white tracking-tight">
+                      {currentCard.primaryValue || "100% In Sync"}
+                    </div>
+                  </div>
+
+                  {currentCard.metricBadge && (
+                    <span
+                      className="px-2.5 py-1 rounded-xl text-xs font-bold font-mono border"
+                      style={{
+                        backgroundColor: currentCard.accentBg,
+                        color: currentCard.accentColor,
+                        borderColor: currentCard.borderColor,
+                      }}
+                    >
+                      {currentCard.metricBadge}
+                    </span>
+                  )}
+                </div>
+
+                {/* Progress bar if yield is given */}
+                {typeof currentCard.progressPercent === "number" && (
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                      <span>Live Floor Yield OEE</span>
+                      <span style={{ color: currentCard.accentColor }}>{currentCard.progressPercent}%</span>
+                    </div>
+                    <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${currentCard.progressPercent}%` }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="h-full rounded-full"
+                        style={{ backgroundColor: currentCard.accentColor }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Description */}
+                <p className="text-xs sm:text-[13px] text-slate-300 leading-relaxed font-normal">
+                  {currentCard.description}
+                </p>
+
+                {/* Micro Capabilities Chips */}
+                {currentCard.features && currentCard.features.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
+                    {currentCard.features.slice(0, 3).map((feat, idx) => (
+                      <span
+                        key={idx}
+                        className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] text-slate-300 bg-white/5 border border-white/10 rounded-lg px-2 py-0.5"
+                      >
+                        <CheckCircle2 className="w-2.5 h-2.5 text-[#BAF91A] shrink-0" />
+                        <span className="truncate">{feat}</span>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* CARD FOOTER: Action Link */}
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between relative z-10 text-xs">
+                <div className="flex items-center gap-1.5 text-slate-400 font-mono text-[11px]">
+                  <Zap className="w-3.5 h-3.5 text-[#BAF91A]" />
+                  <span>Synchronous Ledger</span>
+                </div>
+
+                <div
+                  className="flex items-center gap-1.5 font-bold px-3 py-1.5 rounded-full transition-all group-hover:scale-105 cursor-pointer"
+                  style={{
+                    backgroundColor: currentCard.accentBg,
+                    color: currentCard.accentColor,
+                    border: `1px solid ${currentCard.borderColor}`,
+                  }}
+                >
+                  <span>{currentCard.ctaLabel || "Explore System"}</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* 3. BOTTOM CAROUSEL CONTROLS: Arrow Buttons, Dots & Mobile Swipe Hint */}
+      <div className="flex items-center justify-between w-full max-w-[340px] xs:max-w-[380px] sm:max-w-[440px] md:max-w-[480px] mt-4 px-2">
+        {/* Left Arrow Button */}
+        <button
+          type="button"
+          onClick={() => handlePrev()}
+          className="w-9 h-9 rounded-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 shadow-xs flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          aria-label="Previous offering card"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+
+        {/* Morphing Dot Indicators */}
+        <div className="flex items-center gap-1.5">
+          {cards.map((card, idx) => (
+            <button
+              key={card.id}
+              type="button"
+              onClick={() => setActiveCardIndex(idx)}
+              className={cn(
+                "h-2 rounded-full transition-all duration-300 cursor-pointer",
+                activeCardIndex === idx
+                  ? "w-7 bg-[#101312] dark:bg-[#BAF91A]"
+                  : "w-2 bg-slate-300 hover:bg-slate-400"
+              )}
+              aria-label={`Select ${card.title}`}
+            />
+          ))}
+        </div>
+
+        {/* Right Arrow Button */}
+        <button
+          type="button"
+          onClick={() => handleNext()}
+          className="w-9 h-9 rounded-full bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 shadow-xs flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          aria-label="Next offering card"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Micro Mobile Swipe Helper */}
+      <div className="text-center mt-2">
+        <span className="text-[10px] text-slate-400 font-mono">
+          {isMobile ? "← Swipe left or right to explore →" : "Click tabs or use arrow keys to inspect each platform"}
+        </span>
       </div>
     </div>
   );

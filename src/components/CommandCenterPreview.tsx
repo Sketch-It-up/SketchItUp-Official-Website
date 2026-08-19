@@ -30,14 +30,14 @@ export const CommandCenterPreview: React.FC<CommandCenterPreviewProps> = ({ onOp
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="bg-gradient-to-br from-[#101312] via-slate-900 to-[#181128] text-white rounded-3xl p-6 md:p-10 shadow-2xl shadow-purple-950/25 my-12 relative overflow-hidden"
+      className="bg-gradient-to-br from-[#101312] via-slate-900 to-[#181128] text-white rounded-3xl p-5 sm:p-7 md:p-10 shadow-2xl shadow-purple-950/25 my-8 sm:my-12 relative overflow-hidden"
     >
       
       {/* Background Accent Mesh */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#876DFF]/10 rounded-full blur-3xl pointer-events-none"></div>
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-800">
         <div>
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#BAF91A] animate-pulse"></span>
@@ -45,12 +45,12 @@ export const CommandCenterPreview: React.FC<CommandCenterPreviewProps> = ({ onOp
               Live Owner OS Command Center
             </span>
           </div>
-          <h3 className="text-2xl md:text-3xl font-heading font-bold text-white mt-1">
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-heading font-bold text-white mt-1">
             Every Number That Matters, In One Real-Time View.
           </h3>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             onClick={() => setSimulatedLiveToggle(!simulatedLiveToggle)}
             className={`px-3 py-1.5 rounded-full text-xs font-medium border flex items-center gap-1.5 transition-colors cursor-pointer ${
@@ -75,7 +75,7 @@ export const CommandCenterPreview: React.FC<CommandCenterPreviewProps> = ({ onOp
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 mt-6 overflow-x-auto pb-2">
+      <div className="flex items-center gap-2 mt-6 overflow-x-auto pb-2 scrollbar-none">
         <button
           onClick={() => setActiveTab('overview')}
           className={`relative px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${

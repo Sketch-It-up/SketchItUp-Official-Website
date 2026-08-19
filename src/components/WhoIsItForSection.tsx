@@ -112,7 +112,7 @@ export const WhoIsItForSection: React.FC<WhoIsItForSectionProps> = ({ onNavigate
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className={`p-8 rounded-3xl border transition-all flex flex-col justify-between ${
+              className={`p-6 sm:p-8 rounded-3xl border transition-all flex flex-col justify-between ${
                 ind.highlight
                   ? 'bg-gradient-to-br from-[#101312] via-slate-900 to-[#1a1333] text-white border-slate-800 shadow-xl'
                   : 'bg-white text-slate-900 border-slate-200/90 shadow-sm hover:shadow-md'

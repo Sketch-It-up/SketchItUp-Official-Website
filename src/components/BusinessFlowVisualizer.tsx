@@ -234,9 +234,9 @@ export const BusinessFlowVisualizer: React.FC<BusinessFlowVisualizerProps> = ({ 
         </div>
 
         {/* =========================================================================
-            SKILLFUL HOVER EXPAND ACCORDION (HoverExpand_001 Custom Operational Pattern)
+            DESKTOP: SKILLFUL HOVER EXPAND ACCORDION (md and up)
            ========================================================================= */}
-        <div className="w-full overflow-x-auto pb-4 pt-1 scrollbar-none">
+        <div className="hidden md:block w-full overflow-x-auto pb-4 pt-1 scrollbar-none">
           <div className="flex items-stretch justify-start min-w-[760px] lg:min-w-full gap-2 h-[400px] select-none">
             {flowSteps.map((stepItem, index) => {
               const isExpanded = activeStep === index;
@@ -387,10 +387,114 @@ export const BusinessFlowVisualizer: React.FC<BusinessFlowVisualizerProps> = ({ 
           </div>
         </div>
 
+        {/* =========================================================================
+            MOBILE: DEDICATED TOUCH-FRIENDLY STEP CAROUSEL (< md)
+           ========================================================================= */}
+        <div className="md:hidden space-y-4">
+          {/* Step Pill Scroll Header */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none px-1">
+            {flowSteps.map((s, idx) => {
+              const isSelected = activeStep === idx;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => setActiveStep(idx)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
+                    isSelected
+                      ? 'bg-slate-900 text-white font-bold shadow-sm'
+                      : 'bg-white text-slate-600 border border-slate-200'
+                  }`}
+                >
+                  <span className="font-mono text-[10px] opacity-70">{s.step}</span>
+                  <span>{s.title.split(' ')[0]}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Active Mobile Step Card */}
+          {(() => {
+            const stepItem = flowSteps[activeStep];
+            const StepIcon = stepItem.icon;
+            return (
+              <motion.div
+                key={stepItem.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25 }}
+                className={`rounded-3xl p-6 bg-gradient-to-br ${stepItem.bgGradient} text-white border border-white/10 shadow-xl space-y-5`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-8 h-8 rounded-xl bg-white/10 font-mono font-bold text-xs flex items-center justify-center border border-white/15">
+                      {stepItem.step}
+                    </span>
+                    <div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider block" style={{ color: stepItem.accentColor }}>
+                        {stepItem.tagline}
+                      </span>
+                      <h4 className="text-xl font-heading font-extrabold text-white">
+                        {stepItem.title}
+                      </h4>
+                    </div>
+                  </div>
+                  <div 
+                    className="w-9 h-9 rounded-xl flex items-center justify-center"
+                    style={{ backgroundColor: `${stepItem.accentColor}25`, color: stepItem.accentColor }}
+                  >
+                    <StepIcon className="w-5 h-5" />
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  {stepItem.desc}
+                </p>
+
+                <div className="space-y-1.5 py-1">
+                  {stepItem.details.map((detail, dIdx) => (
+                    <div key={dIdx} className="flex items-center gap-2 text-xs text-slate-200">
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0" style={{ color: stepItem.accentColor }} />
+                      <span>{detail}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-3 border-t border-white/10 flex flex-col gap-3 bg-black/25 -mx-6 -mb-6 p-4 rounded-b-3xl">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-slate-400 text-[10px] uppercase">Automatic Output</span>
+                    <span className="font-bold text-white flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                      {stepItem.output}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 pt-2 border-t border-white/10">
+                    <button
+                      onClick={() => setActiveStep((prev) => (prev > 0 ? prev - 1 : flowSteps.length - 1))}
+                      className="px-4 py-2 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/20 text-white cursor-pointer"
+                    >
+                      &larr; Prev Step
+                    </button>
+                    <span className="text-xs font-mono text-slate-400">
+                      {activeStep + 1} / {flowSteps.length}
+                    </span>
+                    <button
+                      onClick={() => setActiveStep((prev) => (prev < flowSteps.length - 1 ? prev + 1 : 0))}
+                      className="px-4 py-2 rounded-xl text-xs font-bold bg-[#BAF91A] text-[#101312] hover:bg-[#d0ff48] cursor-pointer"
+                    >
+                      Next Step &rarr;
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })()}
+        </div>
+
         {/* Step Progression Bar at Bottom */}
-        <div className="flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-200/90 text-xs shadow-xs">
-          <div className="flex items-center gap-2 text-slate-600">
-            <span className="w-2 h-2 rounded-full bg-[#876DFF]"></span>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-white border border-slate-200/90 text-xs shadow-xs">
+          <div className="flex items-center gap-2 text-slate-600 text-center sm:text-left">
+            <span className="w-2 h-2 rounded-full bg-[#876DFF] shrink-0"></span>
             <span>Continuous data handoff from <strong>Step 01</strong> to <strong>Step 10</strong> without duplicate entry</span>
           </div>
 

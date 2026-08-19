@@ -15,7 +15,7 @@ export const FinalCtaSection: React.FC<FinalCtaSectionProps> = ({ onNavigate, on
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="bg-gradient-to-br from-[#101312] via-[#1a1333] to-[#101312] text-white rounded-3xl p-10 md:p-16 text-center space-y-6 shadow-2xl border border-slate-800 relative overflow-hidden"
+        className="bg-gradient-to-br from-[#101312] via-[#1a1333] to-[#101312] text-white rounded-3xl p-6 sm:p-10 md:p-16 text-center space-y-6 shadow-2xl border border-slate-800 relative overflow-hidden"
       >
         
         {/* Ambient Glow */}

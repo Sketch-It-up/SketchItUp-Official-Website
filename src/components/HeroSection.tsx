@@ -62,7 +62,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, onOpenDemo
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-          className="text-4xl sm:text-6xl lg:text-7xl font-heading font-extrabold text-slate-900 tracking-tight max-w-5xl mx-auto leading-[1.08]"
+          className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-heading font-extrabold text-slate-900 tracking-tight max-w-5xl mx-auto leading-[1.1] sm:leading-[1.08] px-1"
         >
           The Operating System for Complete Control of Your Business.
         </motion.h1>
@@ -72,7 +72,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, onOpenDemo
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-          className="mt-5 text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-normal"
+          className="mt-4 sm:mt-5 text-sm sm:text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-normal px-2"
         >
           One connected platform to manage your <span className="font-semibold text-slate-900">orders, inventory, production, people, finance and operations</span> — giving business owners complete visibility and control.
         </motion.p>

@@ -131,13 +131,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenD
       initial={{ opacity: 0, y: -15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="sticky top-0 z-50 w-full py-3 sm:py-4 px-3 sm:px-6 lg:px-8 transition-all"
+      className="fixed top-0 inset-x-0 z-50 w-full py-3 sm:py-4 px-3 sm:px-6 lg:px-8 pointer-events-none transition-all"
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-center">
+      <div className="max-w-7xl mx-auto flex items-center justify-center pointer-events-auto">
         
         {/* Floating Navbar Pill with Glassmorphism */}
         <motion.div 
-          className="relative flex h-16 w-full items-center justify-between gap-2 rounded-full border border-white/80 bg-white/80 backdrop-blur-xl px-3 sm:px-5 shadow-[0_8px_32px_0_rgba(15,23,42,0.08)] transition-all hover:bg-white/90 hover:border-white/95 ring-1 ring-slate-900/5"
+          className="relative flex h-14 sm:h-16 w-full items-center justify-between gap-1.5 sm:gap-2 rounded-full border border-white/80 bg-white/85 backdrop-blur-xl px-2.5 sm:px-5 shadow-[0_8px_32px_0_rgba(15,23,42,0.08)] transition-all hover:bg-white/95 ring-1 ring-slate-900/5 pointer-events-auto"
         >
           
           {/* Left: Brand Logo */}
@@ -504,7 +504,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenD
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -15, scale: 0.98 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="lg:hidden fixed inset-x-4 top-20 z-50 bg-white/95 backdrop-blur-2xl border border-white/80 rounded-3xl p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] ring-1 ring-slate-900/5 space-y-4 max-h-[85vh] overflow-y-auto"
+            className="lg:hidden fixed inset-x-4 top-20 z-50 bg-white/95 backdrop-blur-2xl border border-white/80 rounded-3xl p-6 shadow-[0_20px_50px_rgba(15,23,42,0.2)] ring-1 ring-slate-900/5 space-y-4 max-h-[85vh] overflow-y-auto pointer-events-auto"
           >
             {/* Header in Drawer */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">

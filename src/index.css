@@ -12,11 +12,17 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+    width: 100%;
   }
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: #FAFAFA;
     color: #101312;
+    overflow-x: clip;
+    width: 100%;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
   }
   h1, h2, h3, .font-heading {
     font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
@@ -44,6 +50,22 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
+/* Mobile Touch & Scroll Utilities */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.touch-pan-x {
+  touch-action: pan-x;
+}
+.touch-pan-y {
+  touch-action: pan-y;
+}
+
 /* Custom scrollbar & glass styling */
 ::-webkit-scrollbar {
   width: 6px;
@@ -61,8 +83,6 @@ html.lenis, html.lenis body {
 }
 
 .glass-card {
-  width: 240px;
-  height: 360px;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -106,5 +126,3 @@ html.lenis, html.lenis body {
     rgba(255, 255, 255, 0.3)
   );
 }
-
-

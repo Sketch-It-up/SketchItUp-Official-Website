@@ -84,8 +84,8 @@ export default function App() {
         onOpenDemo={handleOpenDemo}
       />
 
-      {/* Main Content Body */}
-      <main className="flex-1">
+      {/* Main Content Body with top clearance for fixed floating navbar */}
+      <main className="flex-1 pt-16 sm:pt-20">
         
         {/* Company Level Landing (SketchItUp Solutions Parent) */}
         {currentView === 'company-home' && (
