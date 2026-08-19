@@ -1,0 +1,8 @@
+{
+  "name": "SketchItUp Solutions",
+  "description": "SketchItUp Solutions — Vertical Business Operating Systems & Engineering Consultancy for Enterprises and SME Owners.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
