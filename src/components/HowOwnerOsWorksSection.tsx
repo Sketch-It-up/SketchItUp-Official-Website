@@ -111,7 +111,7 @@ export const HowOwnerOsWorksSection: React.FC<HowOwnerOsWorksSectionProps> = ({ 
       </motion.div>
 
       {/* 7-Step Navigation Carousel */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 overflow-x-auto pb-1">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
         {workflowSteps.map((step, idx) => {
           const isSelected = activeStep === idx;
           return (
@@ -119,10 +119,10 @@ export const HowOwnerOsWorksSection: React.FC<HowOwnerOsWorksSectionProps> = ({ 
               key={step.id}
               onClick={() => setActiveStep(idx)}
               whileHover={{ y: -3, transition: { duration: 0.15 } }}
-              whileTap={{ scale: 0.96 }}
-              className={`p-2.5 sm:p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[80px] sm:min-h-[95px] ${
+              whileTap={{ scale: 0.95 }}
+              className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[95px] ${
                 isSelected
-                  ? 'bg-[#101312] text-white border-[#BAF91A] shadow-md ring-1 ring-[#BAF91A]/50'
+                  ? 'bg-[#101312] text-white border-[#BAF91A] shadow-md scale-105 z-10'
                   : 'bg-white text-slate-800 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
               }`}
             >
@@ -130,13 +130,13 @@ export const HowOwnerOsWorksSection: React.FC<HowOwnerOsWorksSectionProps> = ({ 
                 <span className={`text-xs font-mono font-bold ${isSelected ? 'text-[#BAF91A]' : 'text-slate-400'}`}>
                   {step.stepNum}
                 </span>
-                <span className={`text-[8px] sm:text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded ${
+                <span className={`text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded ${
                   isSelected ? 'bg-white/10 text-slate-300' : 'bg-slate-100 text-slate-500'
                 }`}>
                   {step.dept.split(' ')[0]}
                 </span>
               </div>
-              <div className="mt-1 sm:mt-2 text-xs font-bold leading-tight line-clamp-2">
+              <div className="mt-2 text-xs font-bold leading-tight truncate">
                 {step.title}
               </div>
             </motion.button>
@@ -147,7 +147,7 @@ export const HowOwnerOsWorksSection: React.FC<HowOwnerOsWorksSectionProps> = ({ 
       {/* Active Stage Simulation Showcase */}
       <motion.div 
         layout
-        className="p-5 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-[#101312] to-[#1a1333] text-white border border-slate-800 shadow-2xl"
+        className="p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-[#101312] to-[#1a1333] text-white border border-slate-800 shadow-2xl"
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           

@@ -23,7 +23,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenDemo }) => {
           </div>
           <button
             onClick={() => onOpenDemo('SketchItUp Solutions')}
-            className="w-full sm:w-auto px-6 py-3 rounded-full text-sm font-semibold text-[#101312] bg-[#BAF91A] hover:bg-[#d0ff48] transition-all shadow-lg flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
+            className="px-6 py-3 rounded-full text-sm font-semibold text-[#101312] bg-[#BAF91A] hover:bg-[#d0ff48] transition-all shadow-lg flex items-center gap-2 whitespace-nowrap cursor-pointer"
           >
             <span>Book an Executive Walkthrough</span>
             <ArrowRight className="w-4 h-4" />

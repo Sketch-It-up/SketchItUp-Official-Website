@@ -77,7 +77,7 @@ export const CustomSolutionsView: React.FC<CustomSolutionsViewProps> = ({ onOpen
       </div>
 
       {/* Inquiry Form */}
-      <div className="bg-[#0F172A] text-white rounded-3xl p-5 sm:p-8 md:p-12 border border-slate-800 shadow-2xl">
+      <div className="bg-[#0F172A] text-white rounded-3xl p-8 md:p-12 border border-slate-800 shadow-2xl">
         <div className="max-w-2xl mx-auto space-y-6">
           <div className="text-center space-y-2">
             <span className="text-xs font-bold text-[#00D2B8] uppercase tracking-wider">

@@ -43,60 +43,57 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
 const CORE_OFFERING_CARDS: StackCardItem[] = [
   {
     id: "owneros",
-    title: "OwnerOS Platform",
+    title: "OwnerOS",
     badge: "@commercial_os",
     category: "Commercial Business OS",
-    metricLabel: "Executive Operational Command",
-    metricBadge: "Live Production",
+    metricLabel: "Operational Command",
+    metricBadge: "Live Platform",
     primaryValue: "10+ Core Modules",
     headline: "COMMERCIAL OPERATIONS & COMMAND",
-    description: "AI-enabled operating system connecting orders, inventory, floor machinery, finance, and people into one real-time command center.",
+    description: "AI-enabled operating system for commercial businesses — connecting orders, inventory, production, finance, and people into one real-time command center.",
+    gradient: "from-[#18181b] via-[#27272a] to-[#09090b]",
     accentColor: "#BAF91A",
-    accentBg: "rgba(186, 249, 26, 0.15)",
+    accentBg: "rgba(186, 249, 26, 0.2)",
     borderColor: "rgba(186, 249, 26, 0.4)",
     icon: LayoutDashboard,
     tag: "FLAGSHIP OS",
     ctaLabel: "Explore OwnerOS",
-    features: ["Real-time single ledger", "Live floor yield OEE", "Grounded AI decision copilot"],
-    sparkline: [45, 52, 68, 74, 82, 89, 95, 100]
   },
   {
     id: "mridaos",
-    title: "MridaOS Agri-Platform",
+    title: "MridaOS",
     badge: "@agribusiness_os",
     category: "Agribusiness & Food-Allied",
-    metricLabel: "Farm-to-Factory Stream",
+    metricLabel: "Farm-to-Factory",
     metricBadge: "Specialized Vertical",
     primaryValue: "Procure & Process",
     headline: "BUILT FOR AGRI & ALLIED VALUE CHAINS",
-    description: "AI-enabled OS designed for food & agri businesses — from mandi harvest procurement to grading, processing, and cold-chain dispatch.",
+    description: "AI-enabled operating system specifically designed for agribusiness and food-allied businesses — from harvest procurement to processing, grading, and cold-chain dispatch.",
+    gradient: "from-[#022c22] via-[#064e3b] to-[#042f2e]",
     accentColor: "#34d399",
-    accentBg: "rgba(52, 211, 153, 0.15)",
+    accentBg: "rgba(52, 211, 153, 0.2)",
     borderColor: "rgba(52, 211, 153, 0.4)",
     icon: Sprout,
     tag: "VERTICAL OS",
     ctaLabel: "Discover MridaOS",
-    features: ["Mandi lot weight capture", "Perishable shelf-life tracking", "Cold-chain GPS transit sync"],
-    sparkline: [30, 42, 55, 68, 72, 80, 88, 92]
   },
   {
     id: "custombuilds",
-    title: "Custom Platform Builds",
+    title: "Custom Builds",
     badge: "@tailor_made",
     category: "Tailor-Made Platforms",
     metricLabel: "Bespoke Engineering",
     metricBadge: "100% Tailored",
     primaryValue: "Custom Workflows",
     headline: "BESPOKE AI PLATFORM ENGINEERING",
-    description: "AI-enabled, tailor-made platforms developed around specific enterprise workflows, proprietary floor logic, and unique trade rules.",
+    description: "AI-enabled, tailor-made platforms developed around specific business requirements, proprietary workflows, and specialized operational logic.",
+    gradient: "from-[#1e1b4b] via-[#312e81] to-[#0f172a]",
     accentColor: "#876DFF",
-    accentBg: "rgba(135, 109, 255, 0.15)",
+    accentBg: "rgba(135, 109, 255, 0.2)",
     borderColor: "rgba(135, 109, 255, 0.4)",
     icon: Cpu,
     tag: "BESPOKE BUILDS",
     ctaLabel: "Explore Custom Builds",
-    features: ["Proprietary floor logic", "Enterprise system bridges", "Dedicated cloud architecture"],
-    sparkline: [20, 35, 50, 65, 80, 90, 95, 100]
   }
 ];
 
@@ -142,7 +139,7 @@ export const CompanyHomeView: React.FC<CompanyHomeViewProps> = ({ onNavigate, on
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-heading font-extrabold text-slate-900 tracking-tight leading-[1.1] sm:leading-[1.08] max-w-4xl mx-auto px-1"
+            className="text-4xl sm:text-6xl lg:text-7xl font-heading font-extrabold text-slate-900 tracking-tight leading-[1.08] max-w-4xl mx-auto"
           >
             The Operating System for Complete Control of Your Business.
           </motion.h1>
@@ -152,7 +149,7 @@ export const CompanyHomeView: React.FC<CompanyHomeViewProps> = ({ onNavigate, on
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-sm sm:text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed px-2"
+            className="text-base sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed"
           >
             SketchItUp Solutions is a product consultancy firm that designs and engineers AI-enabled, tailor-made platforms. One connected platform to manage your <span className="font-semibold text-slate-900">orders, inventory, production, people, finance and operations</span> — giving business owners complete visibility and control.
           </motion.p>
@@ -166,6 +163,7 @@ export const CompanyHomeView: React.FC<CompanyHomeViewProps> = ({ onNavigate, on
           >
             <TeamStack
               cards={CORE_OFFERING_CARDS}
+              defaultActiveIndex={0}
               onCardClick={handleOfferingCardSelect}
             />
           </motion.div>
