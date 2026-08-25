@@ -58,7 +58,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenDemo }) => {
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-[#BAF91A]" />
-                <span>SketchItUp Solutions LLP — Industrial Systems Division</span>
+                <span>SketchItUp Solutions LLP</span>
               </div>
             </div>
           </div>
@@ -160,9 +160,28 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenDemo }) => {
         <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>© {new Date().getFullYear()} SketchItUp Solutions LLP. All rights reserved. Built for Business Owners.</p>
           <div className="flex items-center gap-6">
-            <span>Privacy Policy</span>
-            <span>Terms of Service</span>
-            <span>Security Compliance</span>
+            <button
+              id="footer-privacy-policy-btn"
+              onClick={() => onNavigate('privacy-policy')}
+              className="text-slate-400 hover:text-[#BAF91A] transition-colors cursor-pointer inline-flex items-center gap-1.5 focus:outline-none"
+            >
+              <span>Privacy Policy</span>
+            </button>
+            <button
+              id="footer-terms-of-service-btn"
+              onClick={() => onNavigate('terms-of-service')}
+              className="text-slate-400 hover:text-[#BAF91A] transition-colors cursor-pointer inline-flex items-center gap-1.5 focus:outline-none"
+            >
+              <span>Terms of Service</span>
+            </button>
+            <button
+              id="footer-security-compliance-btn"
+              onClick={() => onNavigate('security-compliance')}
+              className="text-slate-400 hover:text-[#BAF91A] transition-colors cursor-pointer inline-flex items-center gap-1.5 focus:outline-none"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#BAF91A] inline-block"></span>
+              <span>Security Compliance</span>
+            </button>
           </div>
         </div>
       </div>

@@ -11,6 +11,9 @@ import { CustomSolutionsView } from './views/CustomSolutionsView';
 import { AboutView } from './views/AboutView';
 import { ResourcesView } from './views/ResourcesView';
 import { ProductComingSoonView } from './views/ProductComingSoonView';
+import { PrivacyPolicyView } from './views/PrivacyPolicyView';
+import { SecurityComplianceView } from './views/SecurityComplianceView';
+import { TermsOfServiceView } from './views/TermsOfServiceView';
 import { DemoBookingModal } from './components/DemoBookingModal';
 
 export default function App() {
@@ -181,6 +184,30 @@ export default function App() {
         {/* Resources, Case Studies & FAQs */}
         {currentView === 'resources' && (
           <ResourcesView
+            onOpenDemo={handleOpenDemo}
+          />
+        )}
+
+        {/* Privacy Policy */}
+        {currentView === 'privacy-policy' && (
+          <PrivacyPolicyView
+            onNavigate={handleNavigate}
+            onOpenDemo={handleOpenDemo}
+          />
+        )}
+
+        {/* Security & Compliance */}
+        {currentView === 'security-compliance' && (
+          <SecurityComplianceView
+            onNavigate={handleNavigate}
+            onOpenDemo={handleOpenDemo}
+          />
+        )}
+
+        {/* Terms of Service */}
+        {currentView === 'terms-of-service' && (
+          <TermsOfServiceView
+            onNavigate={handleNavigate}
             onOpenDemo={handleOpenDemo}
           />
         )}
