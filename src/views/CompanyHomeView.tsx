@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   PRODUCTS_DATA, 
   ProductItem 
@@ -19,11 +19,27 @@ import {
   Building2, 
   ArrowUpRight,
   CheckCircle2,
-  Check
+  Check,
+  Zap,
+  Activity,
+  Workflow,
+  Radio,
+  Lock,
+  ChevronRight,
+  Lightbulb,
+  Link2,
+  Users,
+  Eye,
+  Maximize2,
+  Briefcase,
+  Code2
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { TeamStack, StackCardItem } from '../components/unlumen-ui/team-stack';
-import { AboutSketchItUpSection } from '../components/AboutSketchItUpSection';
+import { BusinessFlowVisualizer } from '../components/BusinessFlowVisualizer';
+import { EngineeringMethodologyBanner } from '../components/EngineeringMethodologyBanner';
+import { CoreArchitectureSection } from '../components/CoreArchitectureSection';
+import { OwnersRealitySection } from '../components/OwnersRealitySection';
 import { FinalCtaSection } from '../components/FinalCtaSection';
 
 interface CompanyHomeViewProps {
@@ -39,26 +55,42 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Truck,
 };
 
+// 5 Philosophy Pillars
+const PHILOSOPHY_PILLARS = [
+  {
+    title: "Simplify",
+    statement: "Complex processes should become easier to execute.",
+    icon: Zap,
+    accent: "#BAF91A"
+  },
+  {
+    title: "Connect",
+    statement: "Information should flow across functions instead of remaining in silos.",
+    icon: Link2,
+    accent: "#876DFF"
+  },
+  {
+    title: "Empower",
+    statement: "Teams should have the tools to do their jobs better.",
+    icon: Users,
+    accent: "#38bdf8"
+  },
+  {
+    title: "Illuminate",
+    statement: "Owners should have visibility into what is happening.",
+    icon: Eye,
+    accent: "#fbbf24"
+  },
+  {
+    title: "Scale",
+    statement: "Systems should help businesses grow without proportionally increasing complexity.",
+    icon: Maximize2,
+    accent: "#34d399"
+  }
+];
+
 // 3 Core Offerings Carousel Cards
 const CORE_OFFERING_CARDS: StackCardItem[] = [
-  {
-    id: "owneros",
-    title: "OwnerOS",
-    badge: "@commercial_os",
-    category: "Commercial Business OS",
-    metricLabel: "Operational Command",
-    metricBadge: "Live Platform",
-    primaryValue: "10+ Core Modules",
-    headline: "COMMERCIAL OPERATIONS & COMMAND",
-    description: "AI-enabled operating system for commercial businesses — connecting orders, inventory, production, finance, and people into one real-time command center.",
-    gradient: "from-[#18181b] via-[#27272a] to-[#09090b]",
-    accentColor: "#BAF91A",
-    accentBg: "rgba(186, 249, 26, 0.2)",
-    borderColor: "rgba(186, 249, 26, 0.4)",
-    icon: LayoutDashboard,
-    tag: "FLAGSHIP OS",
-    ctaLabel: "Explore OwnerOS",
-  },
   {
     id: "mridaos",
     title: "MridaOS",
@@ -76,6 +108,24 @@ const CORE_OFFERING_CARDS: StackCardItem[] = [
     icon: Sprout,
     tag: "VERTICAL OS",
     ctaLabel: "Discover MridaOS",
+  },
+  {
+    id: "owneros",
+    title: "OwnerOS",
+    badge: "@commercial_os",
+    category: "Commercial Business OS",
+    metricLabel: "Operational Command",
+    metricBadge: "Live Platform",
+    primaryValue: "10+ Core Modules",
+    headline: "COMMERCIAL OPERATIONS & COMMAND",
+    description: "AI-enabled operating system for commercial businesses — connecting orders, inventory, production, finance, and people into one real-time command center.",
+    gradient: "from-[#18181b] via-[#27272a] to-[#09090b]",
+    accentColor: "#BAF91A",
+    accentBg: "rgba(186, 249, 26, 0.2)",
+    borderColor: "rgba(186, 249, 26, 0.4)",
+    icon: LayoutDashboard,
+    tag: "FLAGSHIP OS",
+    ctaLabel: "Explore OwnerOS",
   },
   {
     id: "custombuilds",
@@ -112,10 +162,10 @@ export const CompanyHomeView: React.FC<CompanyHomeViewProps> = ({ onNavigate, on
   };
 
   return (
-    <div className="space-y-20 pb-16 bg-[#FAFAFA] text-[#0F172A]">
+    <div className="space-y-12 md:space-y-14 pb-16 bg-[#FAFAFA] text-[#0F172A]">
       
       {/* 1. COMPANY HERO SECTION */}
-      <section className="relative pt-10 pb-12 md:pt-14 md:pb-16 overflow-hidden">
+      <section className="relative pt-10 pb-2 md:pt-14 md:pb-3 overflow-hidden">
         {/* Background glow effects */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-r from-[#BAF91A]/15 via-[#876DFF]/15 to-[#38bdf8]/15 blur-3xl rounded-full pointer-events-none -z-10" />
 
@@ -151,7 +201,7 @@ export const CompanyHomeView: React.FC<CompanyHomeViewProps> = ({ onNavigate, on
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-base sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed"
           >
-            SketchItUp Solutions is a product consultancy firm that designs and engineers AI-enabled, tailor-made platforms. One connected platform to manage your <span className="font-semibold text-slate-900">orders, inventory, production, people, finance and operations</span> — giving business owners complete visibility and control.
+            SketchItUp Solutions is a product consultancy firm that designs and engineers AI enabled, tailor-made software platforms. All In One Integrated platform to manage your <span className="font-semibold text-slate-900">orders, inventory, production, people, finance and operations</span>, giving business owners a complete visibility and pro-active control.
           </motion.p>
 
           {/* Graphic Carousel for 3 Core Offerings */}
@@ -163,7 +213,6 @@ export const CompanyHomeView: React.FC<CompanyHomeViewProps> = ({ onNavigate, on
           >
             <TeamStack
               cards={CORE_OFFERING_CARDS}
-              defaultActiveIndex={0}
               onCardClick={handleOfferingCardSelect}
             />
           </motion.div>
@@ -215,279 +264,208 @@ export const CompanyHomeView: React.FC<CompanyHomeViewProps> = ({ onNavigate, on
         </div>
       </section>
 
-      {/* 2. PRODUCT PORTFOLIO GRID (THE SUITE) */}
-      <section id="products-suite-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-slate-200">
-          <div className="space-y-2">
-            <span className="text-xs font-bold text-[#876DFF] uppercase tracking-widest bg-purple-50 px-3.5 py-1 rounded-full border border-purple-200 inline-block">
-              Vertical Operating Systems
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-heading font-extrabold text-slate-900 tracking-tight">
-              The SketchItUp Product Suite
-            </h2>
+      {/* 2. WHAT IS AN OPERATING SYSTEM? (END-TO-END BUSINESS PROCESS FLOW) */}
+      <div id="what-is-owneros-section" className="w-full">
+        <BusinessFlowVisualizer onExploreModule={(modId) => onNavigate('modules', modId)} />
+      </div>
+
+      {/* 2.1 5-STAGE ENGINEERING METHODOLOGY (HOW WE DELIVER CUSTOM OS) */}
+      <div id="engineering-methodology-section" className="w-full">
+        <EngineeringMethodologyBanner onOpenDemo={onOpenDemo} />
+      </div>
+
+      {/* 3. CORE ARCHITECTURAL ENGINE (SHARED FOUNDATION) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <CoreArchitectureSection 
+          onNavigate={onNavigate}
+          onOpenDemo={onOpenDemo} 
+        />
+      </section>
+
+      {/* 4. THE OPERATIONAL REALITY (WHAT PROBLEM WE SOLVE) */}
+      <div id="company-problem-section" className="w-full">
+        <OwnersRealitySection 
+          onNavigate={onNavigate}
+          onOpenDemo={onOpenDemo} 
+        />
+      </div>
+
+      {/* 4.1 OUR PHILOSOPHY */}
+      <section id="home-philosophy-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-3xl mx-auto space-y-3"
+        >
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-mono font-bold text-emerald-800">
+            <Lightbulb className="w-3.5 h-3.5 text-emerald-700" />
+            <span className="uppercase tracking-wider">OUR PHILOSOPHY</span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-md">
-            Purpose-built operating systems for vertical industry workflows, sharing our centralized core engine and executive command philosophy.
+
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-extrabold text-slate-900 tracking-tight leading-tight">
+            Technology should create clarity, not complexity.
+          </h2>
+
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            We believe good technology should:
           </p>
-        </div>
+        </motion.div>
 
-        {/* The 5-Card Product Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          
-          {/* Card 1: Owner OS (Featured Flagship Live Anchor Product - Span 7 on desktop) */}
-          <motion.div
-            whileHover={{ y: -4 }}
-            transition={{ duration: 0.2 }}
-            className="lg:col-span-7 rounded-3xl p-8 sm:p-10 bg-[#101312] text-white border border-slate-800 shadow-2xl relative overflow-hidden flex flex-col justify-between group"
-          >
-            {/* Background accent glow */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-[#BAF91A]/20 via-[#876DFF]/15 to-transparent blur-3xl pointer-events-none" />
-
-            <div className="space-y-6 relative z-10">
-              {/* Header Badge */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-10 h-10 rounded-xl bg-[#BAF91A] text-[#101312] flex items-center justify-center font-bold shadow-md">
-                    <LayoutDashboard className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-heading font-extrabold text-white">
-                      {liveProduct.name}
-                    </h3>
-                    <span className="text-xs text-slate-400 font-mono">
-                      {liveProduct.vertical}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span>LIVE PRODUCTION</span>
-                </div>
-              </div>
-
-              {/* Tagline & Description */}
-              <div className="space-y-2">
-                <div className="text-base font-bold text-[#BAF91A] font-heading">
-                  {liveProduct.tagline}
-                </div>
-                <p className="text-sm text-slate-300 leading-relaxed max-w-xl">
-                  {liveProduct.shortDesc}
-                </p>
-              </div>
-
-              {/* Live Capabilities Feature Chips */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
-                {liveProduct.capabilities?.map((cap, idx) => (
-                  <div key={idx} className="flex items-center gap-2 text-xs text-slate-200 bg-white/5 border border-white/10 rounded-xl px-3 py-2">
-                    <Check className="w-3.5 h-3.5 text-[#BAF91A] shrink-0" />
-                    <span className="truncate">{cap}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Bottom Actions */}
-            <div className="pt-8 mt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
-              <div className="text-xs text-slate-400 flex items-center gap-2">
-                <span className="font-semibold text-white">14 Modular Apps</span>
-                <span>•</span>
-                <span>Real-Time Yield Telemetry</span>
-              </div>
-
-              <button
-                onClick={() => onNavigate('owner-os-home')}
-                className="w-full sm:w-auto px-6 py-3 rounded-full text-xs font-bold text-[#101312] bg-[#BAF91A] hover:bg-[#d0ff48] transition-all flex items-center justify-center gap-2 shadow-lg cursor-pointer group-hover:scale-105"
-              >
-                <span>Enter Owner OS Workspace</span>
-                <ArrowRight className="w-4 h-4 text-[#101312]" />
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Cards 2 & 3: Agriculture and Retail (Span 5 on desktop) */}
-          <div className="lg:col-span-5 grid grid-cols-1 gap-6">
-            {upcomingProducts.slice(0, 2).map((prod) => {
-              const IconComp = ICON_MAP[prod.icon] || Layers;
-              return (
-                <motion.div
-                  key={prod.id}
-                  whileHover={{ y: -3 }}
-                  transition={{ duration: 0.2 }}
-                  className="rounded-3xl p-6 bg-white border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5">
-                        <div 
-                          className="w-9 h-9 rounded-xl flex items-center justify-center text-white"
-                          style={{ backgroundColor: '#101312' }}
-                        >
-                          <IconComp className="w-4 h-4 text-slate-200" />
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-heading font-bold text-slate-900">
-                            {prod.name}
-                          </h3>
-                          <span className="text-[11px] text-slate-500 font-mono">
-                            {prod.vertical}
-                          </span>
-                        </div>
-                      </div>
-
-                      <span className="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
-                        Soon
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      {prod.shortDesc}
-                    </p>
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-[11px] text-slate-400 italic">
-                      In Architecture
-                    </span>
-                    <button
-                      onClick={() => onNavigate(prod.route)}
-                      className="inline-flex items-center gap-1 text-xs font-bold text-slate-800 hover:text-[#876DFF] transition-colors cursor-pointer"
-                    >
-                      <span>Join Pilot Waitlist</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* Cards 4 & 5: Healthcare and Logistics (Bottom row, 2 equal columns on desktop) */}
-          {upcomingProducts.slice(2, 4).map((prod) => {
-            const IconComp = ICON_MAP[prod.icon] || Layers;
+        {/* 5 Philosophy Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {PHILOSOPHY_PILLARS.map((phil, pIdx) => {
+            const IconP = phil.icon;
             return (
               <motion.div
-                key={prod.id}
-                whileHover={{ y: -3 }}
-                transition={{ duration: 0.2 }}
-                className="lg:col-span-6 rounded-3xl p-6 sm:p-7 bg-white border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+                key={phil.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: pIdx * 0.07 }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                className="rounded-3xl p-6 bg-white border border-slate-200 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between group"
               >
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-xl bg-[#101312] flex items-center justify-center text-slate-200">
-                        <IconComp className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-heading font-bold text-slate-900">
-                          {prod.name}
-                        </h3>
-                        <span className="text-[11px] text-slate-500 font-mono">
-                          {prod.vertical}
-                        </span>
-                      </div>
-                    </div>
-
-                    <span className="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
-                      Soon
-                    </span>
+                  <div 
+                    className="w-10 h-10 rounded-xl flex items-center justify-center border shadow-sm group-hover:scale-105 transition-transform"
+                    style={{ 
+                      backgroundColor: `${phil.accent}20`, 
+                      borderColor: `${phil.accent}40`,
+                      color: phil.accent === '#BAF91A' ? '#101312' : phil.accent 
+                    }}
+                  >
+                    <IconP className="w-5 h-5" />
                   </div>
 
-                  <div className="text-xs font-semibold text-slate-700">
-                    {prod.tagline}
-                  </div>
+                  <h3 className="text-lg font-heading font-extrabold text-slate-900 group-hover:text-[#876DFF] transition-colors">
+                    {phil.title}
+                  </h3>
+
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    {prod.shortDesc}
+                    {phil.statement}
                   </p>
                 </div>
 
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 italic">
-                    Specifications Drafting
-                  </span>
-                  <button
-                    onClick={() => onNavigate(prod.route)}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-slate-800 hover:text-[#876DFF] transition-colors cursor-pointer"
-                  >
-                    <span>View Planned Specs & Waitlist</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#BAF91A]"></span>
+                  <span>CORE TENET 0{pIdx + 1}</span>
                 </div>
               </motion.div>
             );
           })}
-
         </div>
       </section>
 
-      {/* 3. CORE ARCHITECTURAL ENGINE (SHARED FOUNDATION) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-white border border-slate-200 p-8 md:p-12 shadow-sm space-y-8">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#876DFF]">
-              Unified Foundation
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-slate-900">
-              The Architecture Powering Every SketchItUp OS
+      {/* 4.2 LEADERSHIP & ENGINEERING */}
+      <section id="home-leadership-engineering-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+          className="rounded-3xl bg-white border border-slate-200/90 p-8 sm:p-10 md:p-12 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden space-y-8"
+        >
+          {/* Subtle Accent Glow & Grid Dot Background */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-[#876DFF]/5 via-[#BAF91A]/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+          {/* Header & Sub-narrative */}
+          <div className="relative z-10 max-w-3xl space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-mono font-bold text-slate-800">
+              <Users className="w-3.5 h-3.5 text-[#876DFF]" />
+              <span className="uppercase tracking-wider">LEADERSHIP & ENGINEERING</span>
+            </div>
+
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-extrabold text-slate-900 tracking-tight leading-tight">
+              The Team Behind SketchItUp Solutions
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600">
-              Whether on the shop floor or in distribution centers, every product in our suite is engineered with four core primitives.
+
+            <p className="text-base sm:text-lg text-slate-700 font-medium leading-relaxed">
+              Built by people who understand business. Engineered by people who understand technology.
+            </p>
+
+            <p className="text-sm text-slate-600 leading-relaxed pt-1 max-w-2xl">
+              SketchItUp Solutions brings together experienced leadership (IIM grads) and engineering talent (IIT grads), uniting operational acumen, product thinking, and robust system design.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 pt-4">
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#101312] text-[#BAF91A] flex items-center justify-center text-xs font-bold">
-                <LayoutDashboard className="w-4 h-4" />
+          {/* Three Refined Identity Pillars with Interactive Accent Styling */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 relative z-10">
+            
+            {/* Pillar 1 */}
+            <div className="p-6 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-3 hover:border-[#BAF91A]/80 hover:bg-white hover:shadow-sm transition-all group">
+              <div className="flex items-center justify-between">
+                <div className="w-9 h-9 rounded-xl bg-[#101312] text-[#BAF91A] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                  <Briefcase className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-200/70 text-slate-700 uppercase">
+                  Pillar 01
+                </span>
               </div>
-              <h3 className="text-sm font-bold text-slate-900 font-heading">Owner-First UI</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Designed specifically for the executive decision-maker to see total operations without manual reports.
-              </p>
+              <div className="space-y-1">
+                <h3 className="text-base font-heading font-bold text-slate-900 group-hover:text-slate-950 transition-colors">
+                  Business Insight
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  We understand supply chains, workflows, and cash flow dynamics before designing digital systems.
+                </p>
+              </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#101312] text-indigo-400 flex items-center justify-center text-xs font-bold">
-                <Database className="w-4 h-4" />
+            {/* Pillar 2 */}
+            <div className="p-6 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-3 hover:border-[#876DFF]/50 hover:bg-white hover:shadow-sm transition-all group">
+              <div className="flex items-center justify-between">
+                <div className="w-9 h-9 rounded-xl bg-[#876DFF]/15 border border-[#876DFF]/30 text-[#876DFF] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                  <Code2 className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-200/70 text-slate-700 uppercase">
+                  Pillar 02
+                </span>
               </div>
-              <h3 className="text-sm font-bold text-slate-900 font-heading">Live Single Ledger</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Orders, stock levels, machine outputs, and accounts all update one synchronous relational truth.
-              </p>
+              <div className="space-y-1">
+                <h3 className="text-base font-heading font-bold text-slate-900 group-hover:text-[#876DFF] transition-colors">
+                  Engineering Craft
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Dependable, responsive architecture designed to scale seamlessly with your growing operations.
+                </p>
+              </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#101312] text-[#876DFF] flex items-center justify-center text-xs font-bold">
-                <Cpu className="w-4 h-4" />
+            {/* Pillar 3 */}
+            <div className="p-6 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-3 hover:border-emerald-400 hover:bg-white hover:shadow-sm transition-all group">
+              <div className="flex items-center justify-between">
+                <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-200/70 text-slate-700 uppercase">
+                  Pillar 03
+                </span>
               </div>
-              <h3 className="text-sm font-bold text-slate-900 font-heading">Event Triggers</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Workflows advance automatically between departments when quality criteria and job cards are marked.
-              </p>
+              <div className="space-y-1">
+                <h3 className="text-base font-heading font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
+                  Skin in the Game
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Direct accountability for team adoption, workflow clarity, and lasting business outcomes.
+                </p>
+              </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
-              <div className="w-8 h-8 rounded-lg bg-[#101312] text-emerald-400 flex items-center justify-center text-xs font-bold">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <h3 className="text-sm font-bold text-slate-900 font-heading">Grounded AI Copilot</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Plain-English operational questions, proactive scrap anomaly alerts, and daily executive summaries.
-              </p>
-            </div>
           </div>
-        </div>
-      </section>
 
-      {/* 4. ABOUT SKETCHITUP SOLUTIONS SECTION (COMPANY LEVEL) */}
-      <div id="company-about-section">
-        <AboutSketchItUpSection
-          onNavigate={onNavigate}
-          onOpenDemo={onOpenDemo}
-        />
-      </div>
+          {/* Bottom Human Trust Commitment */}
+          <div className="pt-2 border-t border-slate-100 flex items-center justify-between flex-wrap gap-2 text-xs sm:text-sm text-slate-600 font-medium relative z-10">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#876DFF]"></span>
+              <span>A dedicated team businesses can rely on to build technology that actually works for them.</span>
+            </div>
+            <span className="text-[11px] font-mono text-slate-400">SketchItUp Solutions</span>
+          </div>
+
+        </motion.div>
+      </section>
 
       {/* 5. FINAL CALL TO ACTION */}
       <div id="company-final-cta-section">

@@ -159,7 +159,7 @@ export const BusinessFlowVisualizer: React.FC<BusinessFlowVisualizerProps> = ({ 
   ];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 pb-10 space-y-8">
       
       {/* Section Title & Positioning */}
       <motion.div 
@@ -170,13 +170,13 @@ export const BusinessFlowVisualizer: React.FC<BusinessFlowVisualizerProps> = ({ 
         className="text-center max-w-3xl mx-auto space-y-3"
       >
         <span className="text-xs font-extrabold text-[#876DFF] uppercase tracking-widest bg-[#876DFF]/10 px-4 py-1.5 rounded-full inline-block border border-[#876DFF]/20">
-          What is OwnerOS?
+          What is Owner OS?
         </span>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-heading font-extrabold text-slate-900 tracking-tight">
           One Operating System. Every Critical Business Process.
         </h2>
         <p className="text-slate-600 text-base md:text-lg leading-relaxed">
-          OwnerOS connects the core operational flow of your business into one continuous, unified platform — with the <span className="font-semibold text-slate-900">Owner Command Center</span> giving you complete real-time control at every step.
+          Owner OS connects the core operational flow of your business into one continuous, unified platform — with the <span className="font-semibold text-slate-900">Owner Command Center</span> giving you complete real-time control at every step.
         </p>
       </motion.div>
 

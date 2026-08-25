@@ -11,9 +11,9 @@ import { CustomSolutionsView } from './views/CustomSolutionsView';
 import { AboutView } from './views/AboutView';
 import { ResourcesView } from './views/ResourcesView';
 import { ProductComingSoonView } from './views/ProductComingSoonView';
-import { PrivacyPolicyView } from './views/PrivacyPolicyView';
 import { SecurityComplianceView } from './views/SecurityComplianceView';
 import { TermsOfServiceView } from './views/TermsOfServiceView';
+import { PrivacyPolicyView } from './views/PrivacyPolicyView';
 import { DemoBookingModal } from './components/DemoBookingModal';
 
 export default function App() {
@@ -134,6 +134,7 @@ export default function App() {
         {/* Custom Software Solutions & Engineering Consultancy */}
         {currentView === 'custom-solutions' && (
           <CustomSolutionsView
+            onNavigate={handleNavigate}
             onOpenDemo={handleOpenDemo}
           />
         )}
@@ -177,6 +178,7 @@ export default function App() {
         {/* Company About & Vision */}
         {currentView === 'about' && (
           <AboutView
+            onNavigate={handleNavigate}
             onOpenDemo={handleOpenDemo}
           />
         )}
@@ -188,15 +190,7 @@ export default function App() {
           />
         )}
 
-        {/* Privacy Policy */}
-        {currentView === 'privacy-policy' && (
-          <PrivacyPolicyView
-            onNavigate={handleNavigate}
-            onOpenDemo={handleOpenDemo}
-          />
-        )}
-
-        {/* Security & Compliance */}
+        {/* Security & Compliance Page */}
         {currentView === 'security-compliance' && (
           <SecurityComplianceView
             onNavigate={handleNavigate}
@@ -204,9 +198,17 @@ export default function App() {
           />
         )}
 
-        {/* Terms of Service */}
+        {/* Terms of Service Page */}
         {currentView === 'terms-of-service' && (
           <TermsOfServiceView
+            onNavigate={handleNavigate}
+            onOpenDemo={handleOpenDemo}
+          />
+        )}
+
+        {/* Privacy Policy Page */}
+        {currentView === 'privacy-policy' && (
+          <PrivacyPolicyView
             onNavigate={handleNavigate}
             onOpenDemo={handleOpenDemo}
           />

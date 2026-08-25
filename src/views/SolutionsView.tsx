@@ -190,39 +190,279 @@ export const SolutionsView: React.FC<SolutionsViewProps> = ({ onNavigate, onOpen
         >
           We build AI-enabled business operating systems and tailor-made platforms designed around real operational workflows.
         </motion.p>
+      </section>
 
-        {/* Filter Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-wrap items-center justify-center gap-2 pt-4"
-        >
-          <button
-            onClick={() => setActiveTab('all')}
-            className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
-              activeTab === 'all'
-                ? 'bg-[#101312] text-white shadow-md'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
+      {/* 2. THE 3 CORE OFFERINGS OVERVIEW GRID */}
+      <section id="products-suite-section" className="space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          {/* Card 1: OwnerOS (Featured Commercial Operating System) */}
+          <motion.div
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.2 }}
+            className="rounded-3xl p-8 bg-[#101312] text-white border border-slate-800 shadow-2xl relative overflow-hidden flex flex-col justify-between group"
           >
-            All 3 Offerings
-          </button>
-          {CORE_OFFERINGS.map((offering) => (
+            {/* Background accent glow */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#BAF91A]/20 via-[#876DFF]/15 to-transparent blur-3xl pointer-events-none" />
+
+            <div className="space-y-5 relative z-10">
+              {/* Header Badge */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-xl bg-[#BAF91A] text-[#101312] flex items-center justify-center font-bold shadow-md">
+                    <LayoutDashboard className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-heading font-extrabold text-white">
+                      OwnerOS
+                    </h3>
+                    <span className="text-[11px] text-slate-400 font-mono">
+                      Commercial Business OS
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[11px] font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>LIVE PRODUCTION</span>
+                </div>
+              </div>
+
+              {/* Tagline & Description */}
+              <div className="space-y-1.5">
+                <div className="text-sm font-bold text-[#BAF91A] font-heading">
+                  The Owner's Operational Command Center
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  AI-enabled operating system for commercial businesses — connecting orders, inventory, production, finance, and people into a single real-time command center.
+                </p>
+              </div>
+
+              {/* Live Capabilities Feature Chips */}
+              <div className="space-y-2 pt-1">
+                {[
+                  'Multi-stage production & live job card tracking',
+                  'Smart reorder buffers & inventory sync',
+                  'Single-pane executive command dashboard',
+                  'Floor-to-finance automated reconciliation'
+                ].map((cap, idx) => (
+                  <div key={idx} className="flex items-center gap-2 text-xs text-slate-200 bg-white/5 border border-white/10 rounded-xl px-3 py-2">
+                    <Check className="w-3.5 h-3.5 text-[#BAF91A] shrink-0" />
+                    <span className="truncate">{cap}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="pt-6 mt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
+              <div className="text-[11px] text-slate-400">
+                10+ Core Modules • Real-Time
+              </div>
+
+              <button
+                onClick={() => onNavigate('owner-os-home')}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-bold text-[#101312] bg-[#BAF91A] hover:bg-[#d0ff48] transition-all flex items-center justify-center gap-1.5 shadow-lg cursor-pointer group-hover:scale-105"
+              >
+                <span>Explore OwnerOS</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#101312]" />
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Card 2: MridaOS (Agribusiness & Food-Allied Operating System) */}
+          <motion.div
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.2 }}
+            className="rounded-3xl p-8 bg-white border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group relative overflow-hidden"
+          >
+            {/* Background accent glow */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-emerald-500/10 via-teal-500/5 to-transparent blur-3xl pointer-events-none" />
+
+            <div className="space-y-5 relative z-10">
+              {/* Header Badge */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-xl bg-[#101312] text-emerald-400 flex items-center justify-center font-bold shadow-md">
+                    <Sprout className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-heading font-extrabold text-slate-900">
+                      MridaOS
+                    </h3>
+                    <span className="text-[11px] text-slate-500 font-mono">
+                      Agribusiness & Food-Allied
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-bold">
+                  <span>SPECIALIZED VERTICAL</span>
+                </div>
+              </div>
+
+              {/* Tagline & Description */}
+              <div className="space-y-1.5">
+                <div className="text-sm font-bold text-emerald-600 font-heading">
+                  Farm-to-Factory Value Chain Visibility
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  AI-enabled operating system specifically designed for agribusiness and food-allied businesses — from harvest procurement to processing, grading, and cold-chain dispatch.
+                </p>
+              </div>
+
+              {/* Capabilities Feature Chips */}
+              <div className="space-y-2 pt-1">
+                {[
+                  'Harvest intake batching & quality inspection',
+                  'Milling yield-loss variance tracking',
+                  'Perishable storage telemetry & expiry alerts',
+                  'Farmer payout ledgers & procurement sync'
+                ].map((cap, idx) => (
+                  <div key={idx} className="flex items-center gap-2 text-xs text-slate-700 bg-slate-50 border border-slate-200/80 rounded-xl px-3 py-2">
+                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span className="truncate">{cap}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="pt-6 mt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
+              <div className="text-[11px] text-slate-400">
+                Farm to Factory • Traceability
+              </div>
+
+              <button
+                onClick={() => {
+                  setActiveTab('mrida-os');
+                  const el = document.getElementById('offerings-deep-dive');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer group-hover:scale-105"
+              >
+                <span>Explore MridaOS</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Custom Builds (Tailor-Made Platforms) */}
+          <motion.div
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.2 }}
+            className="rounded-3xl p-8 bg-white border border-slate-200/90 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group relative overflow-hidden"
+          >
+            {/* Background accent glow */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-purple-500/10 via-indigo-500/5 to-transparent blur-3xl pointer-events-none" />
+
+            <div className="space-y-5 relative z-10">
+              {/* Header Badge */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-xl bg-[#101312] text-[#876DFF] flex items-center justify-center font-bold shadow-md">
+                    <Cpu className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-heading font-extrabold text-slate-900">
+                      Custom Builds
+                    </h3>
+                    <span className="text-[11px] text-slate-500 font-mono">
+                      Tailor-Made Platforms
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-50 border border-purple-200 text-[#876DFF] text-[11px] font-bold">
+                  <span>BESPOKE BUILDS</span>
+                </div>
+              </div>
+
+              {/* Tagline & Description */}
+              <div className="space-y-1.5">
+                <div className="text-sm font-bold text-[#876DFF] font-heading">
+                  Tailored Around Your Specific Requirements
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  AI-enabled, tailor-made platforms developed around specific business requirements, proprietary workflows, complex multi-entity setups, and custom IoT/hardware logic.
+                </p>
+              </div>
+
+              {/* Capabilities Feature Chips */}
+              <div className="space-y-2 pt-1">
+                {[
+                  '100% bespoke data architecture & rules',
+                  'APIs, IoT, ERP & weighing machine sync',
+                  'Role-tailored operator & executive UIs',
+                  'Dedicated consultancy & sprint delivery'
+                ].map((cap, idx) => (
+                  <div key={idx} className="flex items-center gap-2 text-xs text-slate-700 bg-slate-50 border border-slate-200/80 rounded-xl px-3 py-2">
+                    <Check className="w-3.5 h-3.5 text-[#876DFF] shrink-0" />
+                    <span className="truncate">{cap}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="pt-6 mt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
+              <div className="text-[11px] text-slate-400">
+                100% Bespoke • Sprints
+              </div>
+
+              <button
+                onClick={() => onNavigate('custom-solutions')}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer group-hover:scale-105"
+              >
+                <span>Explore Custom</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </motion.div>
+
+        </div>
+      </section>
+
+      {/* 3. DEEP DIVE ARCHITECTURE & CAPABILITIES BREAKDOWN */}
+      <div id="offerings-deep-dive" className="pt-8 border-t border-slate-200 space-y-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="space-y-2">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#876DFF] bg-purple-50 px-3.5 py-1 rounded-full border border-purple-200 inline-block">
+              In-Depth Specifications
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-heading font-extrabold text-slate-900">
+              Detailed Architecture & Target Verticals
+            </h2>
+          </div>
+
+          {/* Filter Tabs */}
+          <div className="flex flex-wrap items-center gap-2">
             <button
-              key={offering.id}
-              onClick={() => setActiveTab(offering.id)}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeTab === offering.id
+              onClick={() => setActiveTab('all')}
+              className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                activeTab === 'all'
                   ? 'bg-[#101312] text-white shadow-md'
                   : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
               }`}
             >
-              <span>{offering.name}</span>
+              All 3 Deep Dives
             </button>
-          ))}
-        </motion.div>
-      </section>
+            {CORE_OFFERINGS.map((offering) => (
+              <button
+                key={offering.id}
+                onClick={() => setActiveTab(offering.id)}
+                className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  activeTab === offering.id
+                    ? 'bg-[#101312] text-white shadow-md'
+                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                <span>{offering.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* 2. THE THREE CORE OFFERINGS DETAILED SHOWCASE */}
       <section className="space-y-10">

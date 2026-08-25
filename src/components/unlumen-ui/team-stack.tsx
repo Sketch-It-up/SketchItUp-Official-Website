@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   TrendingUp,
@@ -7,10 +7,6 @@ import {
   AlertTriangle,
   DollarSign,
   ArrowUpRight,
-  ShieldCheck,
-  Package,
-  Layers,
-  CheckCircle2,
   ChevronLeft,
   ChevronRight,
   Maximize2
@@ -128,175 +124,147 @@ interface TeamStackProps {
   className?: string;
   onCardClick?: (card: StackCardItem) => void;
   defaultExpanded?: boolean;
-  defaultActiveIndex?: number;
 }
 
 export function TeamStack({
   cards = DEFAULT_CARDS,
   className,
   onCardClick,
-  defaultExpanded = false,
-  defaultActiveIndex,
+  defaultExpanded = true,
 }: TeamStackProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  
-  // Set default active index: if provided, use it; for 3-card set (Company Home), default to 0 (OwnerOS); for 5 cards, default to 2 (Command)
-  const initialIndex = defaultActiveIndex !== undefined 
-    ? defaultActiveIndex 
-    : (cards.length === 3 ? 0 : Math.floor(cards.length / 2));
-    
-  const [activeCardIndex, setActiveCardIndex] = useState<number>(initialIndex);
+  const [isContainerHovered, setIsContainerHovered] = useState(false);
+  const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
+  const centerCardIdx = Math.floor(cards.length / 2);
+  const [activeCardIndex, setActiveCardIndex] = useState<number>(centerCardIdx);
   const [isFannedOut, setIsFannedOut] = useState<boolean>(defaultExpanded);
-  const touchStartX = useRef<number | null>(null);
+  const [screenWidth, setScreenWidth] = useState<number>(
+    typeof window !== "undefined" ? window.innerWidth : 1200
+  );
 
-  // Responsive mobile detection
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640);
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
     };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Allow manual card cycling
-  const handlePrev = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setActiveCardIndex((prev) => (prev > 0 ? prev - 1 : cards.length - 1));
   };
 
-  const handleNext = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setActiveCardIndex((prev) => (prev < cards.length - 1 ? prev + 1 : 0));
   };
 
-  // Touch handlers for mobile swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return;
-    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(deltaX) > 40) {
-      if (deltaX > 0) {
-        handlePrev();
-      } else {
-        handleNext();
-      }
-    }
-    touchStartX.current = null;
-  };
-
-  // Deterministic calculations for natural stacking deck
+  // Smooth, non-glitching card layout and hover transformation
   const getCardTransform = (index: number, total: number) => {
-    const isExpanded = isHovered || isFannedOut;
+    const centerIndex = Math.floor(total / 2);
+    const offsetFromCenter = index - centerIndex;
     const isSelected = activeCardIndex === index;
+    const isHovered = hoveredCardIndex === index;
 
-    // Fanned out horizontal deck layout with smooth rotation & spacing
-    if (isExpanded) {
-      let relativePos = 0;
+    // Responsive screen width thresholds
+    const isDesktop = screenWidth >= 1024;
+    const isTablet = screenWidth >= 768 && screenWidth < 1024;
+    const isMobile = screenWidth < 640;
+
+    // Expand spacing when hovering over container or cards
+    const hoverExpansion = isContainerHovered || hoveredCardIndex !== null ? 1.12 : 1.0;
+
+    if (isFannedOut || defaultExpanded) {
       if (total === 3) {
-        // For 3 cards: index 0 (OwnerOS) center, index 1 (MridaOS) left, index 2 (CustomBuilds) right
-        if (index === 0) relativePos = 0;
-        else if (index === 1) relativePos = -1;
-        else if (index === 2) relativePos = 1;
-      } else {
-        const centerIndex = Math.floor(total / 2);
-        relativePos = index - centerIndex;
+        if (isMobile) {
+          // Mobile stack with slight spread on hover
+          const mobileBaseX = offsetFromCenter * (isContainerHovered ? 40 : 30);
+          const mobileRotate = isHovered ? 0 : offsetFromCenter * 4;
+          const mobileY = isHovered ? -16 : isSelected ? -8 : 6;
+          const mobileScale = isHovered ? 1.04 : isSelected ? 1.0 : 0.94;
+          const mobileZ = isHovered ? 60 : isSelected ? 40 : 20 - Math.abs(offsetFromCenter);
+
+          return {
+            x: mobileBaseX,
+            y: mobileY,
+            rotate: mobileRotate,
+            scale: mobileScale,
+            zIndex: mobileZ,
+          };
+        }
+
+        // Desktop / Tablet base distances with smooth span-out
+        const baseDistance = isDesktop ? 300 : isTablet ? 220 : 165;
+        const targetSpread = baseDistance * hoverExpansion;
+
+        if (offsetFromCenter === -1) {
+          // Left Card (e.g., MridaOS)
+          return {
+            x: isHovered ? -targetSpread - 8 : -targetSpread,
+            y: isHovered ? -18 : isSelected ? -12 : 10,
+            rotate: isHovered ? 0 : isSelected ? -2 : -4.5,
+            scale: isHovered ? 1.05 : isSelected ? 1.03 : 0.96,
+            zIndex: isHovered ? 60 : isSelected ? 45 : 25,
+          };
+        } else if (offsetFromCenter === 0) {
+          // Center Card (e.g., OwnerOS)
+          return {
+            x: 0,
+            y: isHovered ? -22 : isSelected ? -16 : -8,
+            rotate: 0,
+            scale: isHovered ? 1.07 : isSelected ? 1.05 : 1.01,
+            zIndex: isHovered ? 60 : isSelected ? 50 : 35,
+          };
+        } else {
+          // Right Card (e.g., Custom Builds)
+          return {
+            x: isHovered ? targetSpread + 8 : targetSpread,
+            y: isHovered ? -18 : isSelected ? -12 : 10,
+            rotate: isHovered ? 0 : isSelected ? 2 : 4.5,
+            scale: isHovered ? 1.05 : isSelected ? 1.03 : 0.96,
+            zIndex: isHovered ? 60 : isSelected ? 45 : 25,
+          };
+        }
       }
 
-      const xSpread = isMobile ? relativePos * 65 : relativePos * 135;
-      const rotateDeg = relativePos * (isMobile ? 2.5 : 4);
-      const yOffset = Math.abs(relativePos) * (isMobile ? 6 : 10);
+      // Dynamic fan out for N cards
+      const baseSpacing = isMobile ? 32 : isDesktop ? 270 : 185;
+      const xSpread = offsetFromCenter * baseSpacing * hoverExpansion;
+      const rotateDeg = isHovered ? 0 : offsetFromCenter * (isMobile ? 3 : 4);
+      const yOffset = Math.abs(offsetFromCenter) * (isMobile ? 6 : 12);
 
       return {
         x: xSpread,
-        y: isSelected ? yOffset - 14 : yOffset,
-        rotate: isSelected ? 0 : rotateDeg,
-        scale: isSelected ? 1.03 : 0.96,
-        zIndex: isSelected ? 40 : 20 - Math.abs(relativePos),
+        y: isHovered ? yOffset - 20 : isSelected ? yOffset - 14 : yOffset,
+        rotate: rotateDeg,
+        scale: isHovered ? 1.06 : isSelected ? 1.04 : 0.96,
+        zIndex: isHovered ? 60 : isSelected ? 50 : 25 - Math.abs(offsetFromCenter),
       };
     }
 
-    // Specialized 3-Card Stack Layout (OwnerOS center, MridaOS left, CustomBuilds right)
-    if (total === 3) {
-      const leftOffset = isMobile ? -24 : -38;
-      const rightOffset = isMobile ? 24 : 38;
-      const rotAngle = isMobile ? 4.5 : 6;
-      const yLift = isMobile ? 8 : 12;
-
-      // When OwnerOS (index 0) is active (default):
-      if (activeCardIndex === 0) {
-        if (index === 0) {
-          // OwnerOS centered in front
-          return { x: 0, y: -10, rotate: 0, scale: 1.03, zIndex: 40 };
-        } else if (index === 1) {
-          // MridaOS on the left
-          return { x: leftOffset, y: yLift, rotate: -rotAngle, scale: 0.97, zIndex: 20 };
-        } else {
-          // Custom Builds on the right
-          return { x: rightOffset, y: yLift, rotate: rotAngle, scale: 0.97, zIndex: 18 };
-        }
-      }
-
-      // When MridaOS (index 1) is active:
-      if (activeCardIndex === 1) {
-        if (index === 1) {
-          // MridaOS centered in front
-          return { x: 0, y: -10, rotate: 0, scale: 1.03, zIndex: 40 };
-        } else if (index === 0) {
-          // OwnerOS on the right
-          return { x: rightOffset, y: yLift, rotate: rotAngle, scale: 0.97, zIndex: 20 };
-        } else {
-          // Custom Builds on the left
-          return { x: leftOffset, y: yLift, rotate: -rotAngle, scale: 0.97, zIndex: 18 };
-        }
-      }
-
-      // When Custom Builds (index 2) is active:
-      if (activeCardIndex === 2) {
-        if (index === 2) {
-          // Custom Builds centered in front
-          return { x: 0, y: -10, rotate: 0, scale: 1.03, zIndex: 40 };
-        } else if (index === 0) {
-          // OwnerOS on the left
-          return { x: leftOffset, y: yLift, rotate: -rotAngle, scale: 0.97, zIndex: 20 };
-        } else {
-          // MridaOS on the right
-          return { x: rightOffset, y: yLift, rotate: rotAngle, scale: 0.97, zIndex: 18 };
-        }
-      }
-    }
-
-    // Default 5-card or N-card Stacking deck
-    const centerIndex = Math.floor(total / 2);
-    const offsetFromCenter = index - centerIndex;
-    const mobileFactor = isMobile ? 0.65 : 1;
-
+    // Compact Stacked Deck fallback
     const stackOffsets = [
-      { x: -44 * mobileFactor, y: 16 * mobileFactor, rotate: -7 * mobileFactor, zIndex: 1 },
-      { x: -22 * mobileFactor, y: 8 * mobileFactor, rotate: -3.5 * mobileFactor, zIndex: 2 },
-      { x: 0, y: 0, rotate: 0, zIndex: 5 }, // Center
-      { x: 22 * mobileFactor, y: 8 * mobileFactor, rotate: 3.5 * mobileFactor, zIndex: 3 },
-      { x: 44 * mobileFactor, y: 16 * mobileFactor, rotate: 7 * mobileFactor, zIndex: 1 },
+      { x: -36, y: 16, rotate: -8, zIndex: 1 },
+      { x: -18, y: 8, rotate: -4, zIndex: 2 },
+      { x: 0, y: 0, rotate: 0, zIndex: 5 },
+      { x: 18, y: 8, rotate: 4, zIndex: 3 },
+      { x: 36, y: 16, rotate: 8, zIndex: 1 },
     ];
 
     const defaultPose = stackOffsets[index] || {
-      x: offsetFromCenter * 18 * mobileFactor,
-      y: Math.abs(offsetFromCenter) * 8 * mobileFactor,
-      rotate: offsetFromCenter * 4 * mobileFactor,
+      x: offsetFromCenter * 18,
+      y: Math.abs(offsetFromCenter) * 8,
+      rotate: offsetFromCenter * 4,
       zIndex: 10 - Math.abs(offsetFromCenter),
     };
 
-    if (isSelected) {
+    if (isHovered || isSelected) {
       return {
         x: 0,
-        y: -12,
+        y: -16,
         rotate: 0,
-        scale: 1.03,
-        zIndex: 50,
+        scale: 1.05,
+        zIndex: 60,
       };
     }
 
@@ -304,7 +272,7 @@ export function TeamStack({
       x: defaultPose.x,
       y: defaultPose.y,
       rotate: defaultPose.rotate,
-      scale: 0.98,
+      scale: 1,
       zIndex: defaultPose.zIndex,
     };
   };
@@ -313,42 +281,43 @@ export function TeamStack({
     <div
       id="unlumen-team-stack"
       className={cn(
-        "relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center select-none py-3 sm:py-6 overflow-hidden sm:overflow-visible",
+        "relative w-full max-w-6xl mx-auto flex flex-col items-center justify-center select-none py-4 sm:py-6 overflow-hidden sm:overflow-visible",
         className
       )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      onMouseEnter={() => setIsContainerHovered(true)}
+      onMouseLeave={() => {
+        setIsContainerHovered(false);
+        setHoveredCardIndex(null);
+      }}
     >
       {/* Interactive Controls & Mode Toggle Header */}
-      <div className="flex items-center justify-between w-full max-w-xl px-3 sm:px-4 mb-3 sm:mb-4 text-xs">
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-slate-900/5 dark:bg-white/10 text-slate-700 text-[10px] sm:text-[11px] font-semibold border border-slate-200/60 backdrop-blur-sm shadow-2xs">
+      <div className="flex items-center justify-between w-full max-w-3xl px-4 mb-4 text-xs">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/5 text-slate-700 text-[11px] font-semibold border border-slate-200/60 backdrop-blur-sm shadow-xs">
             <span className="w-1.5 h-1.5 rounded-full bg-[#BAF91A] animate-pulse"></span>
-            Interactive Suite Deck
+            Fanned Offerings Showcase
           </span>
-          <span className="text-slate-400 hidden md:inline">•</span>
-          <span className="text-slate-500 text-[11px] hidden md:inline">
-            Tap or hover cards to explore
+          <span className="text-slate-400 hidden sm:inline">•</span>
+          <span className="text-slate-500 text-[11px] hidden sm:inline">
+            Hover to span out • Click to focus
           </span>
         </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => setIsFannedOut(!isFannedOut)}
-            className="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 shadow-2xs hover:text-slate-900 transition-colors flex items-center gap-1.5 cursor-pointer"
-            title="Toggle fanned grid view"
+            className="px-2.5 py-1 rounded-lg text-[11px] font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 shadow-2xs hover:text-slate-900 transition-colors flex items-center gap-1.5 cursor-pointer"
+            title="Toggle card layout"
           >
             <Maximize2 className="w-3 h-3 text-slate-500" />
-            <span>{isFannedOut ? "Stack" : "Fan Out"}</span>
+            <span>{isFannedOut ? "Keep Fanned" : "Fan Out"}</span>
           </button>
 
-          <div className="flex items-center gap-0.5 sm:gap-1 bg-white border border-slate-200 rounded-lg p-0.5 shadow-2xs">
+          <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-0.5 shadow-2xs">
             <button
               type="button"
-              onClick={(e) => handlePrev(e)}
+              onClick={handlePrev}
               className="p-1 rounded text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
               aria-label="Previous card"
             >
@@ -359,7 +328,7 @@ export function TeamStack({
             </span>
             <button
               type="button"
-              onClick={(e) => handleNext(e)}
+              onClick={handleNext}
               className="p-1 rounded text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
               aria-label="Next card"
             >
@@ -370,16 +339,17 @@ export function TeamStack({
       </div>
 
       {/* Main Stack Container Stage */}
-      <div className="relative w-full h-[370px] sm:h-[390px] md:h-[400px] flex items-center justify-center overflow-visible">
+      <div className="relative w-full h-[390px] sm:h-[420px] flex items-center justify-center overflow-visible">
         {/* Glow backdrop behind cards */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-[280px] sm:w-[460px] md:w-[540px] h-[200px] sm:h-[240px] bg-gradient-to-r from-[#BAF91A]/15 via-[#876DFF]/15 to-[#38bdf8]/15 blur-3xl rounded-full opacity-70" />
+          <div className="w-[320px] sm:w-[600px] lg:w-[850px] h-[240px] bg-gradient-to-r from-[#34d399]/15 via-[#BAF91A]/20 to-[#876DFF]/15 blur-3xl rounded-full opacity-80" />
         </div>
 
         {/* Stack of Cards */}
-        <div className="relative w-[285px] xs:w-[305px] sm:w-[330px] h-[330px] sm:h-[350px] flex items-center justify-center">
+        <div className="relative w-[285px] sm:w-[320px] md:w-[345px] h-[350px] sm:h-[370px] flex items-center justify-center">
           {cards.map((card, index) => {
             const isSelected = activeCardIndex === index;
+            const isHovered = hoveredCardIndex === index;
             const targetPose = getCardTransform(index, cards.length);
             const Icon = card.icon;
 
@@ -387,9 +357,15 @@ export function TeamStack({
               <motion.div
                 key={card.id}
                 id={`stack-card-${card.id}`}
+                layout="position"
+                onMouseEnter={() => setHoveredCardIndex(index)}
+                onMouseLeave={() => setHoveredCardIndex((prev) => (prev === index ? null : prev))}
                 onClick={() => {
-                  setActiveCardIndex(index);
-                  if (onCardClick) onCardClick(card);
+                  if (isSelected) {
+                    if (onCardClick) onCardClick(card);
+                  } else {
+                    setActiveCardIndex(index);
+                  }
                 }}
                 animate={{
                   x: targetPose.x,
@@ -400,31 +376,27 @@ export function TeamStack({
                 }}
                 transition={{
                   type: "spring",
-                  stiffness: 440,
-                  damping: 28,
-                  mass: 0.5,
-                }}
-                whileHover={{
-                  scale: (targetPose.scale || 1) * 1.02,
-                  transition: { duration: 0.15 },
+                  stiffness: 240,
+                  damping: 22,
+                  mass: 0.8,
                 }}
                 className={cn(
-                  "absolute inset-0 rounded-2xl p-4 sm:p-5 text-white cursor-pointer select-none",
+                  "absolute inset-0 rounded-2xl p-5 text-white cursor-pointer select-none",
                   "bg-gradient-to-b shadow-2xl backdrop-blur-md flex flex-col justify-between",
                   card.gradient,
-                  isSelected
-                    ? "ring-2 ring-[#BAF91A] shadow-2xl shadow-black/50"
-                    : "ring-1 ring-white/15 hover:ring-white/30"
+                  isSelected || isHovered
+                    ? "ring-2 ring-[#BAF91A] shadow-2xl shadow-black/70"
+                    : "ring-1 ring-white/15"
                 )}
                 style={{
-                  boxShadow: isSelected
-                    ? "0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 20px rgba(186, 249, 26, 0.25)"
+                  boxShadow: isSelected || isHovered
+                    ? "0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 25px rgba(186, 249, 26, 0.3)"
                     : "0 15px 35px -10px rgba(0, 0, 0, 0.5)",
                 }}
               >
                 {/* Top Bar: Title, Handle badge, Tag */}
-                <div className="flex items-start justify-between gap-2 pb-2.5 sm:pb-3 border-b border-white/10">
-                  <div className="min-w-0">
+                <div className="flex items-start justify-between gap-2 pb-3 border-b border-white/10 shrink-0">
+                  <div>
                     <div className="flex items-center gap-2">
                       <div
                         className="w-6 h-6 rounded-lg flex items-center justify-center text-xs shrink-0"
@@ -435,31 +407,31 @@ export function TeamStack({
                       >
                         <Icon className="w-3.5 h-3.5" />
                       </div>
-                      <h3 className="text-sm font-bold text-slate-100 tracking-tight font-heading truncate">
+                      <h3 className="text-sm font-bold text-slate-100 tracking-tight font-heading">
                         {card.title}
                       </h3>
                     </div>
-                    <span className="text-[10px] sm:text-[11px] font-mono text-[#BAF91A]/90 mt-0.5 inline-block font-medium">
+                    <span className="text-[11px] font-mono text-[#BAF91A]/90 mt-0.5 inline-block font-medium">
                       {card.badge}
                     </span>
                   </div>
 
                   {card.tag && (
-                    <span className="px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-extrabold uppercase tracking-wider bg-[#BAF91A] text-slate-950 shadow-xs shrink-0">
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-[#BAF91A] text-slate-950 shadow-xs shrink-0">
                       {card.tag}
                     </span>
                   )}
                 </div>
 
                 {/* Card Content Body */}
-                <div className="pt-2 sm:pt-3 space-y-2 sm:space-y-2.5 flex-1">
+                <div className="py-2.5 space-y-2 flex-1 flex flex-col justify-center">
                   {/* Metric Status Header */}
                   {card.metricLabel && (
-                    <div className="flex items-center justify-between text-[11px] sm:text-xs text-slate-300">
-                      <span className="font-medium truncate">{card.metricLabel}</span>
+                    <div className="flex items-center justify-between text-xs text-slate-300">
+                      <span className="font-medium text-[11px]">{card.metricLabel}</span>
                       {card.metricBadge && (
                         <span
-                          className="px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold shrink-0"
+                          className="px-2 py-0.5 rounded-md text-[10px] font-bold"
                           style={{
                             backgroundColor: card.accentBg,
                             color: card.accentColor,
@@ -473,13 +445,13 @@ export function TeamStack({
 
                   {/* Primary Big Metric or Headline */}
                   {card.primaryValue && (
-                    <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-heading leading-none">
+                    <div className="text-xl sm:text-2xl font-extrabold text-white tracking-tight font-heading leading-tight">
                       {card.primaryValue}
                     </div>
                   )}
 
                   {card.headline && (
-                    <div className="text-xs sm:text-sm font-bold text-slate-100 font-heading leading-tight tracking-wide">
+                    <div className="text-[10px] sm:text-xs font-bold text-slate-200 font-heading leading-tight tracking-wide uppercase">
                       {card.headline}
                     </div>
                   )}
@@ -491,7 +463,7 @@ export function TeamStack({
                         <motion.div
                           initial={{ width: "0%" }}
                           animate={{ width: `${card.progressPercent}%` }}
-                          transition={{ duration: 0.4, ease: "easeOut" }}
+                          transition={{ duration: 1.2, ease: "easeOut" }}
                           className="h-full rounded-full bg-emerald-400"
                         />
                       </div>
@@ -499,21 +471,28 @@ export function TeamStack({
                   )}
 
                   {/* Description pill */}
-                  <p className="text-[11px] sm:text-xs text-slate-300 leading-relaxed bg-black/30 p-2 sm:p-2.5 rounded-xl border border-white/5 line-clamp-3 sm:line-clamp-none">
+                  <p className="text-[11px] text-slate-300 leading-relaxed bg-black/35 p-2.5 rounded-xl border border-white/5 line-clamp-3">
                     {card.description}
                   </p>
                 </div>
 
-                {/* Bottom Action Pill */}
-                <div className="pt-2 sm:pt-2.5 border-t border-white/10 flex items-center justify-between text-[10px] sm:text-[11px] mt-auto">
+                {/* Bottom Spring CTA Pill */}
+                <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] shrink-0">
                   <span className="text-slate-400 font-medium flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#BAF91A] inline-block animate-pulse"></span>
                     Live Sync
                   </span>
-                  <div className="flex items-center gap-1 font-semibold text-slate-200 group-hover:text-white">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onCardClick) onCardClick(card);
+                    }}
+                    className="flex items-center gap-1 font-semibold text-[#BAF91A] hover:text-[#d0ff48] transition-colors cursor-pointer"
+                  >
                     <span>{card.ctaLabel || "View Live"}</span>
-                    <ArrowUpRight className="w-3 h-3 text-[#BAF91A]" />
-                  </div>
+                    <ArrowUpRight className="w-3.5 h-3.5 text-[#BAF91A]" />
+                  </button>
                 </div>
               </motion.div>
             );
@@ -522,14 +501,14 @@ export function TeamStack({
       </div>
 
       {/* Card Selector Indicator Dots below stack */}
-      <div className="flex items-center justify-center gap-2 mt-2 sm:mt-4 py-1">
+      <div className="flex items-center justify-center gap-2 mt-4">
         {cards.map((card, idx) => (
           <button
             key={card.id}
             type="button"
             onClick={() => setActiveCardIndex(idx)}
             className={cn(
-              "h-2 rounded-full transition-all duration-300 cursor-pointer p-0",
+              "h-2 rounded-full transition-all duration-300 cursor-pointer",
               activeCardIndex === idx
                 ? "w-8 bg-[#BAF91A]"
                 : "w-2 bg-slate-300 hover:bg-slate-400"

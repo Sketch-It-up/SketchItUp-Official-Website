@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Shield, 
   Layers, 
@@ -15,13 +15,7 @@ import {
   Mail, 
   ArrowLeft,
   Calendar,
-  ExternalLink,
-  Copy,
-  Check,
-  Building,
-  MapPin,
-  ChevronRight,
-  ShieldCheck
+  ExternalLink
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -31,15 +25,6 @@ interface PrivacyPolicyViewProps {
 }
 
 export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate, onOpenDemo }) => {
-  const [copiedEmail, setCopiedEmail] = useState(false);
-
-  const handleCopyEmail = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigator.clipboard.writeText('sketchitup.official@gmail.com');
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 2000);
-  };
-
   const sections = [
     {
       id: "scope-of-policy",
@@ -49,27 +34,23 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
       accent: "#876DFF",
       content: (
         <div className="space-y-3 text-sm text-slate-600 leading-relaxed">
-          <p>This Policy covers two categories of information:</p>
+          <p>This Policy covers two distinct categories of information:</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
-              <strong className="text-slate-900 font-semibold block text-xs font-heading">
-                Account & Contact Information
-              </strong>
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
+              <strong className="text-slate-900 font-semibold block text-xs font-heading">Account & Contact Information</strong>
               <p className="text-xs text-slate-600 leading-relaxed">
                 Information about the individuals who sign up for, administer, or use the Services on behalf of a customer business ("Users").
               </p>
             </div>
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
-              <strong className="text-slate-900 font-semibold block text-xs font-heading">
-                Customer Business Data
-              </strong>
+            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
+              <strong className="text-slate-900 font-semibold block text-xs font-heading">Customer Business Data</strong>
               <p className="text-xs text-slate-600 leading-relaxed">
-                The operational data our customers (and their authorized Users) upload, enter, or generate while using the Services, such as purchase orders, inventory records, production and job card data, vendor/customer master data, and financial records.
+                The operational data our customers (and authorized Users) upload, enter, or generate while using the Services (POs, inventory, production, QC records, etc.).
               </p>
             </div>
           </div>
           <p className="text-xs text-slate-500 pt-1">
-            For Customer Business Data, we act as a <strong className="text-slate-700 font-semibold">data processor/service provider</strong>. The customer business remains the <strong className="text-slate-700 font-semibold">data owner/controller</strong> and is responsible for ensuring it has the right to share that data with us, including any personal data of its own employees, vendors, or customers contained within it.
+            For Customer Business Data, we act as a <strong className="text-slate-700 font-semibold">data processor/service provider</strong>. The customer business remains the <strong className="text-slate-700 font-semibold">data owner/controller</strong> and is responsible for ensuring it has the requisite rights to share that data with us.
           </p>
         </div>
       )
@@ -81,52 +62,43 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
       icon: Database,
       accent: "#BAF91A",
       content: (
-        <div className="space-y-4 text-sm text-slate-600 leading-relaxed">
-          {/* Sub-item a */}
+        <div className="space-y-3 text-sm text-slate-600 leading-relaxed">
           <div className="space-y-2">
-            <p className="font-semibold text-slate-900 text-xs font-mono uppercase tracking-wide">
-              a. Information you provide directly
-            </p>
-            <ul className="space-y-1.5 pl-1 text-xs">
+            <p className="font-semibold text-slate-800 text-xs uppercase font-mono">a. Information you provide directly</p>
+            <ul className="space-y-1.5 pl-1">
               <li className="flex items-start gap-2.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#876DFF] mt-1.5 shrink-0"></div>
+                <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
                 <span>Name, business email, phone number, job title, and company details when registering for an account or contacting us.</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#876DFF] mt-1.5 shrink-0"></div>
-                <span>Billing and payment details (processed via our payment processor; we do not store full card numbers).</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+                <span>Billing and payment details (processed securely via our PCI-compliant payment gateway; we do not store full card numbers).</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#876DFF] mt-1.5 shrink-0"></div>
-                <span>Support requests, feedback, and correspondence.</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+                <span>Support requests, onboarding feedback, and written correspondence.</span>
               </li>
             </ul>
           </div>
 
-          {/* Sub-item b */}
-          <div className="space-y-2 pt-3 border-t border-slate-100">
-            <p className="font-semibold text-slate-900 text-xs font-mono uppercase tracking-wide">
-              b. Information collected automatically
-            </p>
-            <ul className="space-y-1.5 pl-1 text-xs">
+          <div className="space-y-2 pt-2 border-t border-slate-100">
+            <p className="font-semibold text-slate-800 text-xs uppercase font-mono">b. Information collected automatically</p>
+            <ul className="space-y-1.5 pl-1">
               <li className="flex items-start gap-2.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#876DFF] mt-1.5 shrink-0"></div>
-                <span>Usage data: pages visited, features used, login timestamps, IP address, device/browser type.</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+                <span>Usage data: pages visited, system features used, login timestamps, IP address, device telemetry, and browser type.</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#876DFF] mt-1.5 shrink-0"></div>
-                <span>Cookies and similar technologies (see Section 7).</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+                <span>Cookies and session management tokens (see Section 7).</span>
               </li>
             </ul>
           </div>
 
-          {/* Sub-item c */}
-          <div className="space-y-2 pt-3 border-t border-slate-100">
-            <p className="font-semibold text-slate-900 text-xs font-mono uppercase tracking-wide">
-              c. Customer Business Data
-            </p>
-            <p className="text-xs text-slate-600 pl-1">
-              Data your organization inputs into OwnerOS/MridaOS in the course of using the Services (e.g., PO details, item masters, machine/route data, dispatch and QC records).
+          <div className="space-y-2 pt-2 border-t border-slate-100">
+            <p className="font-semibold text-slate-800 text-xs uppercase font-mono">c. Customer Business Data</p>
+            <p className="text-xs text-slate-600">
+              Data your organization inputs into OwnerOS / MridaOS in the course of operating the Services (e.g., purchase order details, item master lists, machine route configurations, floor job cards, dispatch schedules, and QC logs).
             </p>
           </div>
         </div>
@@ -140,39 +112,35 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
       accent: "#38bdf8",
       content: (
         <div className="space-y-3 text-sm text-slate-600 leading-relaxed">
-          <p>We use information to:</p>
-          <ul className="space-y-2 text-xs">
+          <p>We use collected information solely to:</p>
+          <ul className="space-y-1.5 pl-1">
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
-              <span>Provide, operate, and maintain the Services.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span>Provide, operate, and maintain OwnerOS and MridaOS.</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
-              <span>Process transactions and manage subscriptions/billing.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span>Process transactions and manage subscription billing.</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
-              <span>Provide customer support and respond to inquiries.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span>Provide technical customer support and respond to inquiries.</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
-              <span>Improve, secure, and troubleshoot the Services.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span>Improve, secure, and troubleshoot application performance.</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
-              <span>Send service-related communications (updates, maintenance notices).</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span>Send essential service communications (updates, security alerts, maintenance notices).</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
-              <span>Send marketing communications where permitted, with an option to opt out.</span>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
               <span>Comply with legal obligations and enforce our Terms of Service.</span>
             </li>
           </ul>
-          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs font-semibold text-slate-800">
-            We do not sell personal information or Customer Business Data to third parties.
+          <div className="p-3 rounded-xl bg-slate-100 text-slate-800 font-medium text-xs">
+            We do not sell personal information or Customer Business Data to third parties under any circumstances.
           </div>
         </div>
       )
@@ -184,29 +152,26 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
       icon: Share2,
       accent: "#34d399",
       content: (
-        <div className="space-y-3 text-sm text-slate-600 leading-relaxed">
-          <p>We may share information with:</p>
-          <ul className="space-y-2 text-xs">
+        <div className="space-y-2.5 text-sm text-slate-600 leading-relaxed">
+          <p>We may share information strictly with:</p>
+          <ul className="space-y-1.5 pl-1">
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#34d399] mt-1.5 shrink-0"></div>
-              <span><strong className="text-slate-800 font-medium">Sub-processors / service providers:</strong> Who help us operate the Services (e.g., cloud hosting, email delivery, payment processing), under contractual confidentiality and data protection obligations.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span><strong className="text-slate-800 font-medium">Sub-processors / service providers:</strong> Trusted infrastructure partners who help us operate the Services (cloud hosting, email delivery, transactional billing), bound under strict confidentiality and data protection agreements.</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#34d399] mt-1.5 shrink-0"></div>
-              <span><strong className="text-slate-800 font-medium">Professional advisors:</strong> (Legal, accounting) as needed.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span><strong className="text-slate-800 font-medium">Professional advisors:</strong> Legal, accounting, and compliance counsel as necessary.</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#34d399] mt-1.5 shrink-0"></div>
-              <span><strong className="text-slate-800 font-medium">Authorities:</strong> Where required by law, regulation, or valid legal process.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span><strong className="text-slate-800 font-medium">Statutory authorities:</strong> Where required by applicable law, regulation, or valid court order.</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#34d399] mt-1.5 shrink-0"></div>
-              <span><strong className="text-slate-800 font-medium">A successor entity:</strong> In the event of a merger, acquisition, or sale of assets, with notice to affected customers where required.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span><strong className="text-slate-800 font-medium">Successor entity:</strong> In the event of a merger, acquisition, or sale of corporate assets, with notice to affected customers.</span>
             </li>
           </ul>
-          <p className="text-xs text-slate-500 pt-1 border-t border-slate-100">
-            We do not permit sub-processors to use Customer Business Data for any purpose other than providing the Services to us.
-          </p>
         </div>
       )
     },
@@ -217,22 +182,16 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
       icon: Clock,
       accent: "#fbbf24",
       content: (
-        <div className="space-y-3 text-sm text-slate-600 leading-relaxed">
-          <p className="text-slate-800 font-medium text-xs">We retain:</p>
-          <ul className="space-y-2 text-xs">
-            <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#fbbf24] mt-1.5 shrink-0"></div>
-              <span><strong className="text-slate-900 font-medium">Account information:</strong> For as long as the account is active, and for a reasonable period afterward to comply with legal, tax, or accounting requirements.</span>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#fbbf24] mt-1.5 shrink-0"></div>
-              <span><strong className="text-slate-900 font-medium">Customer Business Data:</strong> For the duration of the customer's subscription, and for 30–90 days after termination to allow data export, unless a longer period is required by law or agreed in writing.</span>
-            </li>
-          </ul>
-          <p className="text-xs text-slate-500 pt-1">
-            Customers may request earlier deletion of their data by contacting us (see Section 12).
-          </p>
-        </div>
+        <ul className="space-y-2 text-sm text-slate-600 leading-relaxed">
+          <li className="flex items-start gap-2.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+            <span><strong className="text-slate-800 font-medium">Account information:</strong> Retained as long as the account is active, and for a reasonable period thereafter to comply with statutory legal, tax, or auditing obligations.</span>
+          </li>
+          <li className="flex items-start gap-2.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+            <span><strong className="text-slate-800 font-medium">Customer Business Data:</strong> Retained for the active duration of your subscription, and for a 30 to 90 day export window post-termination, after which it is securely purged per standard deletion routines.</span>
+          </li>
+        </ul>
       )
     },
     {
@@ -244,14 +203,13 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
       content: (
         <div className="space-y-3 text-sm text-slate-600 leading-relaxed">
           <p>
-            We implement technical and organizational measures designed to protect information against unauthorized access, alteration, disclosure, or destruction.
+            We implement comprehensive technical and organizational safeguards designed to protect your information against unauthorized access, destruction, loss, alteration, or disclosure.
           </p>
           <div className="pt-1">
             <button
               onClick={() => onNavigate ? onNavigate('security-compliance') : null}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#876DFF] hover:text-[#7254f5] transition-colors cursor-pointer bg-[#876DFF]/10 px-3.5 py-2 rounded-lg border border-[#876DFF]/20"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#876DFF] hover:text-[#7254f5] transition-colors cursor-pointer"
             >
-              <ShieldCheck className="w-4 h-4 text-[#876DFF]" />
               <span>View full details on our Security & Compliance page</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </button>
@@ -267,59 +225,42 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
       accent: "#BAF91A",
       content: (
         <p className="text-sm text-slate-600 leading-relaxed">
-          We use cookies and similar technologies to operate our website and Services, remember preferences, and understand usage patterns. You can control cookies through your browser settings; disabling certain cookies may affect functionality.
+          We use functional cookies and session tokens to maintain authorized user sessions, remember UI preferences, and monitor service telemetry. You can govern cookies through browser settings, though disabling mandatory session tokens may prevent access to authenticated portions of the platform.
         </p>
       )
     },
     {
       id: "your-rights",
       num: "08",
-      title: "Your Rights",
+      title: "Your Rights & Grievance Mechanism",
       icon: UserCheck,
       accent: "#38bdf8",
       content: (
         <div className="space-y-3 text-sm text-slate-600 leading-relaxed">
           <p>
-            Depending on applicable law (including India's Digital Personal Data Protection Act, 2023, where applicable), you may have the right to:
+            In alignment with applicable regulations (including India's Digital Personal Data Protection Act, 2023), you may have the right to:
           </p>
-          <ul className="space-y-2 text-xs">
+          <ul className="space-y-1.5 pl-1">
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
-              <span>Access the personal data we hold about you.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span>Access and review the personal data we hold about you.</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
-              <span>Correct inaccurate or incomplete data.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span>Request correction of inaccurate or incomplete personal records.</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
-              <span>Request erasure of your personal data, subject to legal/contractual retention requirements.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span>Request erasure of your personal data, subject to statutory retention mandates.</span>
             </li>
             <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
-              <span>Withdraw consent for processing based on consent.</span>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#38bdf8] mt-1.5 shrink-0"></div>
-              <span>Raise a grievance regarding how your data is handled.</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2 shrink-0"></div>
+              <span>Withdraw consent for optional communications at any time.</span>
             </li>
           </ul>
-
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 mt-2">
-            <p className="text-xs text-slate-600 leading-relaxed">
-              To exercise these rights, contact our Grievance Officer at{' '}
-              <a 
-                href="mailto:sketchitup.official@gmail.com?subject=Grievance%20Officer%20Inquiry%20-%20DPDP"
-                className="text-[#876DFF] font-semibold hover:underline"
-              >
-                sketchitup.official@gmail.com
-              </a>
-              . We will respond within the timeframe required by applicable law.
-            </p>
-            <p className="text-xs text-slate-500 leading-relaxed pt-1 border-t border-slate-200/60">
-              If you are a User whose data was uploaded by a customer business (e.g., an employee of one of our customers), please contact that business directly, as they control that data; we will support them in fulfilling your request.
-            </p>
-          </div>
+          <p className="text-xs text-slate-500 pt-1">
+            To exercise these rights, please contact our Grievance Desk at <a href="mailto:sketchitup.official@gmail.com" className="text-[#876DFF] font-mono hover:underline">sketchitup.official@gmail.com</a>. If your data was input by your employer/customer business, please contact them directly as the primary data controller.
+          </p>
         </div>
       )
     },
@@ -331,19 +272,19 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
       accent: "#f472b6",
       content: (
         <p className="text-sm text-slate-600 leading-relaxed">
-          Our Services are intended for business use by adults and are not directed at individuals under 18. We do not knowingly collect personal information from children.
+          Our Services are designed exclusively for business and enterprise use by adults and are not directed to individuals under 18. We do not knowingly collect personal data from minors.
         </p>
       )
     },
     {
-      id: "international-data-transfers",
+      id: "international-transfers",
       num: "10",
       title: "International Data Transfers",
       icon: Globe2,
       accent: "#34d399",
       content: (
         <p className="text-sm text-slate-600 leading-relaxed">
-          If data is transferred or stored outside India, we take steps to ensure it receives an adequate level of protection consistent with applicable law.
+          If data is transferred or stored outside India, we take rigorous contractual and technical measures to ensure it receives an equivalent standard of protection consistent with applicable law.
         </p>
       )
     },
@@ -355,53 +296,29 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
       accent: "#876DFF",
       content: (
         <p className="text-sm text-slate-600 leading-relaxed">
-          We may update this Policy from time to time. Material changes will be communicated via the website or email to account administrators. Continued use of the Services after changes take effect constitutes acceptance.
+          We may update this Policy periodically. Material modifications will be posted on our website or communicated directly via email to designated account administrators. Continued use of the Services signifies acceptance of updated terms.
         </p>
       )
     }
   ];
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 pb-24">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 pb-20">
       
       {/* Top Header / Breadcrumb Bar */}
-      <div className="bg-white border-b border-slate-200 sticky top-16 z-30 shadow-2xs backdrop-blur-md bg-white/95">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => onNavigate ? onNavigate('company-home') : window.history.back()}
-              className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3.5 py-1.5 rounded-full transition-colors cursor-pointer"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back to Home</span>
-            </button>
-            <span className="hidden sm:inline text-slate-300">/</span>
-            <span className="hidden sm:inline text-xs font-medium text-slate-500">
-              Legal & Privacy
-            </span>
-          </div>
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center justify-between">
+          <button
+            onClick={() => onNavigate ? onNavigate('company-home') : window.history.back()}
+            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-full transition-colors cursor-pointer"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Home</span>
+          </button>
 
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => onNavigate ? onNavigate('terms-of-service') : null}
-              className="text-xs font-medium text-slate-500 hover:text-[#876DFF] transition-colors cursor-pointer hidden md:inline-flex items-center gap-1"
-            >
-              <span>Terms of Service</span>
-              <ExternalLink className="w-3 h-3" />
-            </button>
-
-            <button
-              onClick={() => onNavigate ? onNavigate('security-compliance') : null}
-              className="text-xs font-medium text-slate-500 hover:text-[#876DFF] transition-colors cursor-pointer hidden md:inline-flex items-center gap-1"
-            >
-              <span>Security Compliance</span>
-              <ExternalLink className="w-3 h-3" />
-            </button>
-
-            <div className="flex items-center gap-2 text-xs text-slate-600 font-mono bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-              <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
-              <span>DPDP 2023 Aligned</span>
-            </div>
+          <div className="flex items-center gap-2 text-xs text-slate-500 font-mono">
+            <span className="w-2 h-2 rounded-full bg-[#BAF91A]"></span>
+            <span>Data Protection & DPDP 2023 Aligned</span>
           </div>
         </div>
       </div>
@@ -414,7 +331,7 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
           transition={{ duration: 0.4 }}
           className="space-y-4"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#876DFF]/10 border border-[#876DFF]/25 text-xs font-mono font-bold text-[#876DFF]">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#876DFF]/15 border border-[#876DFF]/30 text-xs font-mono font-bold text-[#876DFF]">
             <Shield className="w-3.5 h-3.5 text-[#876DFF]" />
             <span className="uppercase tracking-wider">PRIVACY & DATA GOVERNANCE</span>
           </div>
@@ -424,24 +341,20 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
           </h1>
 
           <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-500 pt-1">
-            <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1 rounded-md shadow-2xs">
+            <div className="flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
               <span>Effective Date: September 01, 2026</span>
             </div>
-            <div className="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1 rounded-md shadow-2xs">
+            <span className="text-slate-300">•</span>
+            <div className="flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
               <span>Last Updated: September 01, 2026</span>
             </div>
           </div>
 
-          <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-xs mt-4 space-y-2">
-            <p className="text-base text-slate-700 leading-relaxed font-normal">
-              <strong className="font-semibold text-slate-900">SketchItUp Solutions</strong> ("SketchItUp," "we," "us," or "our") provides <strong className="font-semibold text-slate-900">OwnerOS</strong>, <strong className="font-semibold text-slate-900">MridaOS</strong>, and related software and consulting services (collectively, the "Services") to business customers. This Privacy Policy explains how we collect, use, share, and protect information in connection with the Services and our website.
-            </p>
-            <p className="text-xs text-slate-500 pt-1 border-t border-slate-100">
-              By using our website or Services, you agree to the practices described in this Policy. If you do not agree, please do not use the Services.
-            </p>
-          </div>
+          <p className="text-base sm:text-lg text-slate-700 leading-relaxed max-w-4xl pt-2">
+            SketchItUp Solutions ("SketchItUp," "we," "us," or "our") provides OwnerOS, MridaOS, and related software and consulting services (collectively, the "Services") to business customers. This Privacy Policy explains how we collect, use, share, and protect information in connection with the Services and our website.
+          </p>
         </motion.div>
       </section>
 
@@ -449,151 +362,79 @@ export const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onNavigate
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Sections 1 to 11 */}
-        <div className="space-y-5">
-          {sections.map((section, idx) => {
-            const Icon = section.icon;
-            return (
-              <motion.div
-                key={section.id}
-                id={section.id}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.35, delay: idx * 0.02 }}
-                className="rounded-2xl bg-white border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-3.5 hover:border-slate-300 transition-colors"
-              >
-                <div className="flex items-start gap-4">
-                  <div 
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-2xs"
-                    style={{ 
-                      backgroundColor: `${section.accent}15`, 
-                      border: `1px solid ${section.accent}30`,
-                      color: section.accent === '#BAF91A' ? '#101312' : section.accent 
-                    }}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </div>
-
-                  <div className="space-y-0.5 flex-1">
-                    <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wide">
-                      Section {section.num}
-                    </span>
-                    <h2 className="text-lg sm:text-xl font-heading font-bold text-slate-900">
-                      {section.title}
-                    </h2>
-                  </div>
+        {sections.map((section, idx) => {
+          const Icon = section.icon;
+          return (
+            <motion.div
+              key={section.id}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, delay: idx * 0.03 }}
+              className="rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-4 hover:border-slate-300 transition-colors"
+            >
+              <div className="flex items-start gap-4">
+                <div 
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-xs"
+                  style={{ 
+                    backgroundColor: `${section.accent}15`, 
+                    border: `1px solid ${section.accent}30`,
+                    color: section.accent === '#BAF91A' ? '#101312' : section.accent 
+                  }}
+                >
+                  <Icon className="w-5 h-5" />
                 </div>
 
-                <div className="pl-0 sm:pl-14 pt-1">
-                  {section.content}
+                <div className="space-y-1 flex-1">
+                  <span className="text-[11px] font-mono font-bold text-slate-400 uppercase">
+                    Section {section.num}
+                  </span>
+                  <h2 className="text-lg sm:text-xl font-heading font-bold text-slate-900">
+                    {section.title}
+                  </h2>
                 </div>
-              </motion.div>
-            );
-          })}
-        </div>
+              </div>
 
-        {/* Section 12: Contact Us */}
+              <div className="pl-0 sm:pl-14 pt-1">
+                {section.content}
+              </div>
+            </motion.div>
+          );
+        })}
+
+        {/* Section 12: Contact Us & Grievance */}
         <motion.div
-          id="contact-us"
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
+          viewport={{ once: true }}
           transition={{ duration: 0.35 }}
-          className="rounded-2xl bg-white border border-slate-200/90 p-6 sm:p-7 shadow-xs space-y-5"
+          className="rounded-3xl bg-[#101312] text-white border border-slate-800 p-6 sm:p-8 shadow-md space-y-4"
         >
-          <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-[#876DFF]/15 border border-[#876DFF]/30 text-[#876DFF] flex items-center justify-center shrink-0 shadow-2xs">
-              <Mail className="w-5 h-5" />
-            </div>
-
-            <div className="space-y-0.5 flex-1">
-              <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wide">
-                Section 12
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-2">
+              <span className="text-[11px] font-mono font-bold text-[#BAF91A] uppercase">
+                Section 12 • Privacy & Grievance Desk
               </span>
-              <h2 className="text-lg sm:text-xl font-heading font-bold text-slate-900">
-                Contact Us
+              <h2 className="text-xl font-heading font-bold text-white">
+                Contact SketchItUp Solutions
               </h2>
-              <p className="text-xs text-slate-500 pt-0.5">
-                For questions about this Privacy Policy or to exercise your rights:
-              </p>
-            </div>
-          </div>
-
-          <div className="pl-0 sm:pl-14 grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
-            <div className="space-y-2 text-xs text-slate-600 leading-relaxed">
-              <div className="flex items-center gap-2 text-slate-900 font-semibold">
-                <Building className="w-4 h-4 text-[#876DFF]" />
-                <span>SketchItUp Solutions</span>
-              </div>
-              <div className="flex items-center gap-2 text-slate-600">
-                <MapPin className="w-4 h-4 text-slate-400" />
-                <span>Pune, Maharashtra, India</span>
-              </div>
-              <div className="pt-2">
-                <span className="text-slate-500 block mb-1">Privacy & Grievance Desk:</span>
-                <a 
-                  href="mailto:sketchitup.official@gmail.com?subject=Privacy%20Policy%20Inquiry" 
-                  className="font-mono text-xs text-[#876DFF] font-semibold hover:underline inline-flex items-center gap-1.5"
-                >
-                  <Mail className="w-3.5 h-3.5" />
-                  <span>sketchitup.official@gmail.com</span>
-                </a>
+              <div className="text-xs text-slate-300 space-y-0.5">
+                <p className="font-semibold text-white">SketchItUp Solutions LLP</p>
+                <p>Pune, Maharashtra, India</p>
               </div>
             </div>
 
-            <div className="flex flex-col justify-between p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Need to discuss enterprise data processing agreements (DPA) or security posture?
-              </p>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => onOpenDemo ? onOpenDemo('Privacy & DPA Consultation') : null}
-                  className="px-4 py-2 rounded-full bg-[#101312] text-white text-xs font-semibold hover:bg-slate-800 transition-colors cursor-pointer inline-flex items-center gap-1.5"
-                >
-                  <span>Request Consultation</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={handleCopyEmail}
-                  className="px-3 py-2 rounded-full bg-white border border-slate-200 text-slate-700 text-xs font-medium hover:bg-slate-100 transition-colors cursor-pointer inline-flex items-center gap-1.5"
-                >
-                  {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedEmail ? 'Copied' : 'Copy Email'}</span>
-                </button>
-              </div>
+            <div className="pt-2 sm:pt-0">
+              <a
+                href="mailto:sketchitup.official@gmail.com?subject=Privacy%20Policy%20Inquiry"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#BAF91A] text-slate-950 text-xs font-bold hover:bg-[#d0ff48] transition-colors"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                <span>sketchitup.official@gmail.com</span>
+              </a>
             </div>
           </div>
         </motion.div>
-
-        {/* Footer Navigation Bar for Legal Pages */}
-        <div className="pt-8 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-slate-700">SketchItUp Solutions Legal:</span>
-            <span className="text-slate-800 font-medium">Privacy Policy</span>
-            <span>•</span>
-            <button
-              onClick={() => onNavigate ? onNavigate('terms-of-service') : null}
-              className="text-[#876DFF] hover:underline cursor-pointer font-medium"
-            >
-              Terms of Service
-            </button>
-            <span>•</span>
-            <button
-              onClick={() => onNavigate ? onNavigate('security-compliance') : null}
-              className="text-[#876DFF] hover:underline cursor-pointer font-medium"
-            >
-              Security & Compliance
-            </button>
-          </div>
-
-          <button
-            onClick={() => onNavigate ? onNavigate('company-home') : window.history.back()}
-            className="text-slate-600 hover:text-slate-900 cursor-pointer font-medium inline-flex items-center gap-1"
-          >
-            <span>Return to Main Website</span>
-            <ChevronRight className="w-3 h-3" />
-          </button>
-        </div>
 
       </div>
 

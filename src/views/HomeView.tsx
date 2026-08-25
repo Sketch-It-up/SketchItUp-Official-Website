@@ -45,7 +45,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNavigate, onOpenDemo }) =>
 
       {/* 5. WHAT PROBLEM DOES OWNEROS SOLVE? */}
       <div id="problem-section">
-        <OwnersRealitySection onOpenDemo={onOpenDemo} />
+        <OwnersRealitySection 
+          onNavigate={onNavigate}
+          onOpenDemo={onOpenDemo} 
+        />
       </div>
 
       {/* 6. BUILT AROUND THE OWNER (5 CONTROL PILLARS: SEE, CONTROL, MEASURE, DECIDE, SCALE) */}
