@@ -37,6 +37,7 @@ import {
 import { motion } from 'motion/react';
 import { TeamStack, StackCardItem } from '../components/unlumen-ui/team-stack';
 import { BusinessFlowVisualizer } from '../components/BusinessFlowVisualizer';
+import { MridaBusinessFlowVisualizer } from '../components/MridaBusinessFlowVisualizer';
 import { EngineeringMethodologyBanner } from '../components/EngineeringMethodologyBanner';
 import { CoreArchitectureSection } from '../components/CoreArchitectureSection';
 import { OwnersRealitySection } from '../components/OwnersRealitySection';
@@ -155,7 +156,7 @@ export const CompanyHomeView: React.FC<CompanyHomeViewProps> = ({ onNavigate, on
     if (card.id === 'owneros') {
       onNavigate('owner-os-home');
     } else if (card.id === 'mridaos') {
-      onNavigate('solutions');
+      onNavigate('mrida-os');
     } else if (card.id === 'custombuilds') {
       onNavigate('custom-solutions');
     }
@@ -267,6 +268,14 @@ export const CompanyHomeView: React.FC<CompanyHomeViewProps> = ({ onNavigate, on
       {/* 2. WHAT IS AN OPERATING SYSTEM? (END-TO-END BUSINESS PROCESS FLOW) */}
       <div id="what-is-owneros-section" className="w-full">
         <BusinessFlowVisualizer onExploreModule={(modId) => onNavigate('modules', modId)} />
+      </div>
+
+      {/* 2.05 WHAT IS MRIDA OS? (AGRIBUSINESS END-TO-END WORKFLOW) */}
+      <div id="what-is-mridaos-section" className="w-full">
+        <MridaBusinessFlowVisualizer
+          variant="homepage"
+          onExploreMrida={() => onNavigate('mrida-os')}
+        />
       </div>
 
       {/* 2.1 5-STAGE ENGINEERING METHODOLOGY (HOW WE DELIVER CUSTOM OS) */}

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, CheckCircle2, ArrowRight, Calendar, Building, Phone, Mail, User, Layers } from 'lucide-react';
 import { MODULES_DATA } from '../data/modulesData';
+import { MRIDA_MODULES } from '../data/mridaOsData';
 
 interface DemoBookingModalProps {
   isOpen: boolean;
@@ -12,6 +13,10 @@ export const DemoBookingModal: React.FC<DemoBookingModalProps> = ({ isOpen, onCl
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
+
+  const isMridaContext = Boolean(prefilledModule && prefilledModule.toLowerCase().includes('mrida'));
+  const productDisplayName = isMridaContext ? 'Mrida OS' : 'Owner OS';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -19,13 +24,26 @@ export const DemoBookingModal: React.FC<DemoBookingModalProps> = ({ isOpen, onCl
     designation: 'Business Owner / Founder',
     phone: '',
     email: '',
-    industry: 'Manufacturing',
+    industry: 'Manufacturing & Assembly',
     companySize: '20-100 employees',
     currentSoftware: 'Excel / Tally / Manual',
     selectedModules: prefilledModule ? [prefilledModule] : ['Command Center'],
     challenge: '',
     preferredTime: 'Morning (10 AM - 1 PM)'
   });
+
+  useEffect(() => {
+    if (isOpen) {
+      setStep(1);
+      setSubmitted(false);
+      setValidationError(null);
+      setFormData((prev) => ({
+        ...prev,
+        industry: isMridaContext ? 'Agriculture, Agribusiness & Fertilizers' : prev.industry,
+        selectedModules: prefilledModule ? [prefilledModule] : ['Command Center'],
+      }));
+    }
+  }, [isOpen, prefilledModule, isMridaContext]);
 
   if (!isOpen) return null;
 
@@ -88,7 +106,7 @@ export const DemoBookingModal: React.FC<DemoBookingModalProps> = ({ isOpen, onCl
               Demo Request Confirmed!
             </h3>
             <p className="text-slate-600 text-sm max-w-md mx-auto">
-              Thank you, <strong className="text-slate-900">{formData.name}</strong>. A SketchItUp Solutions Operations Advisor will contact you within 2 business hours to walk you through <span className="text-[#876DFF] font-semibold">Owner OS</span>.
+              Thank you, <strong className="text-slate-900">{formData.name}</strong>. A SketchItUp Solutions Operations Advisor will contact you within 2 business hours to walk you through <span className="text-[#876DFF] font-semibold">{productDisplayName}</span>.
             </p>
             <div className="pt-4">
               <button
@@ -176,13 +194,14 @@ export const DemoBookingModal: React.FC<DemoBookingModalProps> = ({ isOpen, onCl
                         onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
                         className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 focus:ring-2 focus:ring-[#876DFF] outline-none bg-white"
                       >
-                        <option>Manufacturing & Assembly</option>
-                        <option>Industrial Equipment & Tooling</option>
+                        <option>Agriculture, Agribusiness &amp; Fertilizers</option>
+                        <option>Manufacturing &amp; Assembly</option>
+                        <option>Industrial Equipment &amp; Tooling</option>
                         <option>Family Business / Multi-entity</option>
                         <option>Agri-Processing</option>
-                        <option>Retail & Distribution</option>
-                        <option>Healthcare & Pharma</option>
-                        <option>Services & Consulting</option>
+                        <option>Retail &amp; Distribution</option>
+                        <option>Healthcare &amp; Pharma</option>
+                        <option>Services &amp; Consulting</option>
                       </select>
                     </div>
 
@@ -202,19 +221,24 @@ export const DemoBookingModal: React.FC<DemoBookingModalProps> = ({ isOpen, onCl
                     </div>
                   </div>
 
+                  {validationError && (
+                    <p className="text-xs font-medium text-rose-600">{validationError}</p>
+                  )}
+
                   <div className="pt-4 flex justify-end">
                     <button
                       type="button"
                       onClick={() => {
                         if (formData.name && formData.company && formData.phone && formData.email) {
+                          setValidationError(null);
                           setStep(2);
                         } else {
-                          alert("Please fill in required fields (Name, Company, Phone, Email)");
+                          setValidationError('Please fill in all required fields (Name, Company, Phone, Email).');
                         }
                       }}
                       className="px-6 py-3 rounded-full text-sm font-bold text-white bg-[#101312] hover:bg-black transition-all flex items-center gap-2 cursor-pointer shadow"
                     >
-                      <span>Next: Select Modules & Time</span>
+                      <span>Next: Select Modules &amp; Time</span>
                       <ArrowRight className="w-4 h-4 text-[#BAF91A]" />
                     </button>
                   </div>
@@ -223,10 +247,13 @@ export const DemoBookingModal: React.FC<DemoBookingModalProps> = ({ isOpen, onCl
                 <div className="space-y-4">
                   <div>
                     <label className="text-xs font-semibold text-slate-700 block mb-1.5">
-                      Select Modules You Are Most Interested In:
+                      Select {isMridaContext ? 'Mrida OS' : ''} Modules You Are Most Interested In:
                     </label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-36 overflow-y-auto p-2 bg-slate-50 border border-slate-200 rounded-xl">
-                      {MODULES_DATA.map((mod) => {
+                      {(isMridaContext
+                        ? MRIDA_MODULES.map((m) => ({ id: m.id, name: m.title }))
+                        : MODULES_DATA.map((m) => ({ id: m.id, name: m.name }))
+                      ).map((mod) => {
                         const isSelected = formData.selectedModules.includes(mod.name);
                         return (
                           <button

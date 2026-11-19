@@ -37,13 +37,13 @@ export const PRODUCTS_DATA: ProductItem[] = [
   },
   {
     id: 'agri-process',
-    name: 'MridaOS',
+    name: 'Mrida OS',
     vertical: 'Agribusiness & Food-Allied',
-    status: 'soon',
-    tagline: 'Farm-to-factory agribusiness visibility',
-    shortDesc: 'AI-enabled operating system specifically designed for agribusiness and food-allied businesses — from harvest procurement to processing and distribution.',
+    status: 'live',
+    tagline: 'Your Entire Agribusiness. One Intelligent Operating System.',
+    shortDesc: 'AI-enabled integrated business operating system designed for agriculture, agribusiness, fertilizer and food-allied enterprises.',
     icon: 'Sprout',
-    route: 'product-agriculture',
+    route: 'mrida-os',
     accentColor: '#00BBA7',
     capabilities: [
       'Harvest intake batching & quality grade inspection logs',

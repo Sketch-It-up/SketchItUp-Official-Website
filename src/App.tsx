@@ -5,6 +5,7 @@ import { Footer } from './components/Footer';
 import { CompanyHomeView } from './views/CompanyHomeView';
 import { HomeView } from './views/HomeView';
 import { OwnerOsView } from './views/OwnerOsView';
+import { MridaOsView } from './views/MridaOsView';
 import { ModulesView } from './views/ModulesView';
 import { SolutionsView } from './views/SolutionsView';
 import { CustomSolutionsView } from './views/CustomSolutionsView';
@@ -139,10 +140,9 @@ export default function App() {
           />
         )}
 
-        {/* Product Suite: Agriculture & Process OS */}
-        {currentView === 'product-agriculture' && (
-          <ProductComingSoonView
-            productId="agri-process"
+        {/* Mrida OS Dedicated Product Page (Agribusiness & Food-Allied) */}
+        {(currentView === 'mrida-os' || currentView === 'product-agriculture') && (
+          <MridaOsView
             onNavigate={handleNavigate}
             onOpenDemo={handleOpenDemo}
           />

@@ -22,6 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenD
     { id: 'company-home', label: 'Home' },
     { id: 'solutions', label: 'Products' },
     { id: 'owner-os-home', label: 'Owner OS' },
+    { id: 'mrida-os', label: 'Mrida OS' },
     { id: 'custom-solutions', label: 'Custom Solutions' },
     { id: 'about', label: 'About' },
     { id: 'resources', label: 'Resources' },
@@ -31,6 +32,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenD
     if (id === 'company-home') return currentView === 'company-home';
     if (id === 'solutions') return currentView === 'solutions' || currentView === 'owner-os-solutions';
     if (id === 'owner-os-home') return currentView === 'owner-os-home' || currentView === 'home' || currentView === 'owner-os' || currentView === 'modules';
+    if (id === 'mrida-os') return currentView === 'mrida-os' || currentView === 'product-agriculture';
     if (id === 'custom-solutions') return currentView === 'custom-solutions';
     if (id === 'about') return currentView === 'about';
     if (id === 'resources') return currentView === 'resources';
@@ -90,7 +92,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, onOpenD
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-semibold transition-all cursor-pointer ${
+                  className={`flex items-center gap-1.5 rounded-full px-3 xl:px-3.5 py-2 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     active 
                       ? 'bg-slate-900 text-white shadow-sm' 
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'

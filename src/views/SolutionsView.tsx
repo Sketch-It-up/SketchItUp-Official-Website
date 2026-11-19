@@ -108,10 +108,10 @@ const CORE_OFFERINGS: CoreOffering[] = [
     accentColor: '#34d399',
     accentBg: 'rgba(52, 211, 153, 0.12)',
     icon: Sprout,
-    primaryActionLabel: 'Explore Agribusiness Architecture',
-    primaryActionRoute: 'product-agriculture',
-    secondaryActionLabel: 'Book MridaOS Demo',
-    secondaryDemoPrefill: 'MridaOS Agribusiness'
+    primaryActionLabel: 'Explore Mrida OS',
+    primaryActionRoute: 'mrida-os',
+    secondaryActionLabel: 'Book Mrida OS Demo',
+    secondaryDemoPrefill: 'Mrida OS — Agribusiness Operating System'
   },
   {
     id: 'custom-builds',
@@ -334,14 +334,10 @@ export const SolutionsView: React.FC<SolutionsViewProps> = ({ onNavigate, onOpen
               </div>
 
               <button
-                onClick={() => {
-                  setActiveTab('mrida-os');
-                  const el = document.getElementById('offerings-deep-dive');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }}
+                onClick={() => onNavigate('mrida-os')}
                 className="w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer group-hover:scale-105"
               >
-                <span>Explore MridaOS</span>
+                <span>Explore Mrida OS</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -738,10 +734,10 @@ export const SolutionsView: React.FC<SolutionsViewProps> = ({ onNavigate, onOpen
                 </td>
                 <td className="py-3.5 px-4">
                   <button 
-                    onClick={() => onOpenDemo('MridaOS Agribusiness')} 
+                    onClick={() => onNavigate('mrida-os')} 
                     className="font-bold text-slate-900 hover:text-[#876DFF] flex items-center gap-1 cursor-pointer"
                   >
-                    <span>Request Demo</span> &rarr;
+                    <span>Explore Mrida OS</span> &rarr;
                   </button>
                 </td>
                 <td className="py-3.5 px-4">
